@@ -1,0 +1,2632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Piss Patrol</title>
+    <meta name="theme-color" content="#f59e0b">
+    
+    <!-- Apple Web App Capabilities & Custom Homescreen Icon -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Piss Patrol">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="icon.png">
+    
+    <!-- Standard Favicon -->
+    <link rel="icon" type="image/png" href="icon.png">
+    
+    <!-- Tailwind CSS for modern, mobile-first styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for premium, responsive routine insights -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SheetJS for processing spreadsheet files directly inside the app -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- FontAwesome for interactive mobile-friendly icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&family=Fredoka:wght=400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            transition: background-color 0.3s ease;
+        }
+        .brand-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+        /* Lock simulated device viewport to prevent infinite window stretching */
+        .phone-container {
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #fcf8f2;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-active {
+            color: #d97706 !important;
+            transform: translateY(-2px);
+        }
+        .touch-action-none {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -user-select: none;
+            user-select: none;
+            touch-action: pan-y;
+        }
+        .hold-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.4);
+            width: 0%;
+            transition: width 0.5s linear;
+        }
+
+        /* Dark Theme dynamic styling rules */
+        .phone-container.dark-theme { background-color: #0f172a !important; color: #e2e8f0 !important; }
+        .phone-container.dark-theme .bg-white { background-color: #1e293b !important; color: #e2e8f0 !important; border-color: #334155 !important; }
+        .phone-container.dark-theme .bg-slate-50 { background-color: #1e293b !important; border-color: #334155 !important; }
+        .phone-container.dark-theme .text-slate-800, .phone-container.dark-theme .text-slate-700 { color: #e2e8f0 !important; }
+        .phone-container.dark-theme .text-slate-500, .phone-container.dark-theme .text-slate-400 { color: #94a3b8 !important; }
+        .phone-container.dark-theme .border-slate-100, .phone-container.dark-theme .border-slate-200 { border-color: #334155 !important; }
+        .phone-container.dark-theme select, .phone-container.dark-theme input[type="text"], .phone-container.dark-theme input[type="time"], .phone-container.dark-theme input[type="date"] { background-color: #111827 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+        .phone-container.dark-theme nav { background-color: #1e293b !important; border-top-color: #334155 !important; }
+        .phone-container.dark-theme #btn-hold-Pee, .phone-container.dark-theme #btn-hold-Poo, .phone-container.dark-theme #btn-hold-Both, .phone-container.dark-theme #btn-hold-Dry-Run, .phone-container.dark-theme #sleep-mode-btn, .phone-container.dark-theme #btn-force-reset, .phone-container.dark-theme #btn-eat-drink { background-color: #111827 !important; border: 1px solid #334155 !important; color: #f1f5f9 !important; }
+        .phone-container.dark-theme #btn-hold-Pee:hover, .phone-container.dark-theme #btn-hold-Poo:hover, .phone-container.dark-theme #btn-hold-Both:hover, .phone-container.dark-theme #btn-hold-Dry-Run:hover, .phone-container.dark-theme #sleep-mode-btn:hover, .phone-container.dark-theme #btn-force-reset:hover, .phone-container.dark-theme #btn-eat-drink:hover { background-color: #1e293b !important; }
+        .phone-container.dark-theme #btn-accident { background-color: #540d0b !important; border: 1px solid #991b1b !important; color: #fee2e2 !important; }
+        .phone-container.dark-theme #btn-accident:hover { background-color: #7f1d1d !important; }
+        .phone-container.dark-theme #dark-theme-toggle, .phone-container.dark-theme #notification-toggle { background-color: #111827 !important; color: #f1f5f9 !important; border: 1px solid #334155 !important; }
+        .phone-container.dark-theme button[onclick="openCustomLogModal()"], .phone-container.dark-theme button[onclick="downloadSampleTemplate()"] { background-color: #111827 !important; border: 1px solid #334155 !important; color: #f1f5f9 !important; }
+        .phone-container.dark-theme button[onclick="openCustomLogModal()"]:hover, .phone-container.dark-theme button[onclick="downloadSampleTemplate()"]:hover { background-color: #1e293b !important; }
+        .phone-container.dark-theme button[onclick="closeCustomLogModal()"], .phone-container.dark-theme button[onclick="closeAccidentModal()"], .phone-container.dark-theme button[onclick="closeQuickHoldNoteModal()"], .phone-container.dark-theme button[onclick="closeActionConfirm()"], .phone-container.dark-theme button[onclick="cancelMapping()"], .phone-container.dark-theme button[type="button"] { background-color: #111827 !important; border: 1px solid #334155 !important; color: #f1f5f9 !important; }
+        
+        /* Premium Restore Defaults Dark Mode Styling Override */
+        .phone-container.dark-theme #btn-restore-defaults { background-color: #380c0d !important; border: 1px solid #7f1d1d !important; color: #fecaca !important; }
+        .phone-container.dark-theme #btn-restore-defaults:hover { background-color: #531114 !important; }
+        
+        .phone-container.dark-theme #mapper-section { background-color: #1e293b !important; border-color: #334155 !important; color: #f1f5f9 !important; }
+        .phone-container.dark-theme #mapper-section label { color: #94a3b8 !important; }
+        .phone-container.dark-theme #mapper-section select { background-color: #0f172a !important; color: #e2e8f0 !important; border-color: #334155 !important; }
+
+        /* KPI Dark Theme Custom Palette Overrides */
+        .phone-container.dark-theme #kpi-card-runs { background-color: #241808 !important; border-color: #4c2f06 !important; }
+        .phone-container.dark-theme #kpi-card-runs .text-amber-800 { color: #f59e0b !important; }
+        .phone-container.dark-theme #kpi-card-runs .text-amber-950 { color: #fef3c7 !important; }
+
+        .phone-container.dark-theme #kpi-card-success { background-color: #062215 !important; border-color: #064e35 !important; }
+        .phone-container.dark-theme #kpi-card-success .text-emerald-800 { color: #10b981 !important; }
+        .phone-container.dark-theme #kpi-card-success .text-emerald-950 { color: #d1fae5 !important; }
+
+        .phone-container.dark-theme #kpi-card-accidents { background-color: #2b0b0e !important; border-color: #6b1419 !important; }
+        .phone-container.dark-theme #kpi-card-accidents .text-rose-800 { color: #ef4444 !important; }
+        .phone-container.dark-theme #kpi-card-accidents .text-rose-950 { color: #fee2e2 !important; }
+
+        /* Prediction UI Dark Mode overrides */
+        .phone-container.dark-theme #btn-predict { background-color: #3b0764 !important; border-color: #581c87 !important; color: #e9d5ff !important; }
+        .phone-container.dark-theme #btn-predict:hover { background-color: #581c87 !important; }
+        .phone-container.dark-theme #prediction-results { background-color: #1e293b !important; border-color: #334155 !important; }
+        .phone-container.dark-theme #prediction-results .text-purple-800 { color: #d8b4fe !important; }
+        .phone-container.dark-theme #prediction-results .text-purple-950 { color: #f3e8ff !important; }
+        .phone-container.dark-theme #prediction-results .border-purple-100\/50 { border-color: #334155 !important; }
+        .phone-container.dark-theme #prediction-results .text-amber-800 { color: #fcd34d !important; }
+        .phone-container.dark-theme #prediction-results .text-amber-950 { color: #fef3c7 !important; }
+
+        /* Timer Dynamic Theming - Light Mode */
+        .phone-container[data-timer-state="safe"] #timer-progress { background-color: #0ea5e9; } /* Sky Blue */
+        .phone-container[data-timer-state="safe"] #countdown-display { color: #1e293b; }
+        .phone-container[data-timer-state="safe"] #timer-active-badge { background-color: #e0f2fe; color: #075985; border-color: #bae6fd; }
+
+        .phone-container[data-timer-state="soon"] #timer-progress { background-color: #f59e0b; } /* Amber Yellow */
+        .phone-container[data-timer-state="soon"] #countdown-display { color: #d97706; }
+        .phone-container[data-timer-state="soon"] #timer-active-badge { background-color: #fef3c7; color: #92400e; border-color: #fde68a; }
+
+        .phone-container[data-timer-state="now"] #timer-progress { background-color: #ef4444; } /* Rose Red */
+        .phone-container[data-timer-state="now"] #countdown-display { color: #e11d48; }
+        .phone-container[data-timer-state="now"] #timer-active-badge { background-color: #ffe4e6; color: #9f1239; border-color: #fecdd3; }
+
+        .phone-container[data-timer-state="crate"] #timer-progress { background-color: #10b981; } /* Emerald Green */
+        .phone-container[data-timer-state="crate"] #countdown-display { color: #059669; }
+        .phone-container[data-timer-state="crate"] #timer-active-badge { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+
+        .phone-container[data-timer-state="sleep"] #timer-progress { background-color: #6366f1; } /* Indigo */
+        .phone-container[data-timer-state="sleep"] #countdown-display { color: #6366f1; }
+        .phone-container[data-timer-state="sleep"] #timer-active-badge { background-color: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
+
+        /* Timer Dynamic Theming - Dark Mode (Matches KPI Boxes explicitly) */
+        .phone-container.dark-theme[data-timer-state="safe"] #timer-progress { background-color: #38bdf8; }
+        .phone-container.dark-theme[data-timer-state="safe"] #countdown-display { color: #e2e8f0; }
+        .phone-container.dark-theme[data-timer-state="safe"] #timer-active-badge { background-color: #082f49; color: #bae6fd; border-color: #0c4a6e; }
+
+        .phone-container.dark-theme[data-timer-state="soon"] #timer-progress { background-color: #f59e0b; }
+        .phone-container.dark-theme[data-timer-state="soon"] #countdown-display { color: #f59e0b; }
+        .phone-container.dark-theme[data-timer-state="soon"] #timer-active-badge { background-color: #241808; color: #fef3c7; border-color: #4c2f06; }
+
+        .phone-container.dark-theme[data-timer-state="now"] #timer-progress { background-color: #ef4444; }
+        .phone-container.dark-theme[data-timer-state="now"] #countdown-display { color: #ef4444; }
+        .phone-container.dark-theme[data-timer-state="now"] #timer-active-badge { background-color: #2b0b0e; color: #fee2e2; border-color: #6b1419; }
+
+        .phone-container.dark-theme[data-timer-state="crate"] #timer-progress { background-color: #10b981; }
+        .phone-container.dark-theme[data-timer-state="crate"] #countdown-display { color: #10b981; }
+        .phone-container.dark-theme[data-timer-state="crate"] #timer-active-badge { background-color: #062215; color: #d1fae5; border-color: #064e35; }
+
+        .phone-container.dark-theme[data-timer-state="sleep"] #timer-progress { background-color: #818cf8; }
+        .phone-container.dark-theme[data-timer-state="sleep"] #countdown-display { color: #a5b4fc; }
+        .phone-container.dark-theme[data-timer-state="sleep"] #timer-active-badge { background-color: #312e81; color: #e0e7ff; border-color: #3730a3; }
+        
+        /* Overdue text formatting inside subtext */
+        .phone-container[data-timer-state="now"] .timer-overdue-text { color: #e11d48; font-weight: bold; }
+        .phone-container.dark-theme[data-timer-state="now"] .timer-overdue-text { color: #ef4444; }
+        .phone-container[data-timer-state="crate"] .timer-overdue-text { color: #059669; font-weight: bold; }
+        .phone-container.dark-theme[data-timer-state="crate"] .timer-overdue-text { color: #10b981; }
+
+        /* True Dark Theme Synced Settings indicator matching Emerald KPI card */
+        .phone-container.dark-theme #settings-synced-badge {
+            background-color: #062215 !important;
+            border-color: #064e35 !important;
+            color: #d1fae5 !important;
+        }
+
+        /* Dark Mode overrides for the household sync action buttons so they do not blend with the background */
+        .phone-container.dark-theme .btn-sync-action {
+            background-color: #334155 !important;
+            border: 1px solid #475569 !important;
+            color: #f1f5f9 !important;
+        }
+        .phone-container.dark-theme .btn-sync-action:hover {
+            background-color: #475569 !important;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+
+    <div class="phone-container w-full flex flex-col relative text-slate-800 overflow-hidden" id="phone-container">
+        
+        <header class="bg-amber-500 text-white shadow-md sticky top-0 z-40 px-4 py-3 pb-4 rounded-b-[2rem] flex-shrink-0">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-inner overflow-hidden p-0.5">
+                        <img src="piss-patrol-transparent.png" alt="Piss Patrol Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='icon.png';">
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold brand-font tracking-wide">Piss Patrol</h1>
+                        <span id="sync-indicator" class="text-[10px] bg-amber-600/60 px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" id="sync-dot"></span>
+                            <span id="sync-text">Syncing...</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="text-right flex flex-col items-end">
+                    <span class="text-[10px] text-amber-100 uppercase font-bold tracking-wider">Due Status</span>
+                    <span id="header-timer-text" class="text-xs font-semibold bg-amber-600/40 px-2.5 py-1 rounded-lg">Calculating...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Screen Content Sections: Scrolls internally behind the pinned navigation footer bar -->
+        <main class="flex-grow overflow-y-auto px-4 py-5 pb-24 flex flex-col gap-5">
+            
+            <!-- SCREEN 1: SCHEDULE / COUNTER (DEFAULT SCREEN) -->
+            <div id="screen-schedule" class="screen-view flex flex-col gap-5">
+                
+                <div class="bg-white rounded-3xl p-5 shadow-sm border border-amber-100/60 relative overflow-hidden text-center">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Potty Countdown</span>
+                        <span id="timer-active-badge" class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-100">
+                            Safe Zone
+                        </span>
+                    </div>
+
+                    <div class="my-3">
+                        <div id="countdown-display" class="text-5xl font-black tracking-tight text-slate-800 font-mono transition-colors">
+                            00:00:00
+                        </div>
+                        <p id="countdown-subtext" class="text-[11px] text-slate-400 mt-1 font-medium">Resetting on latest success</p>
+                    </div>
+
+                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-4">
+                        <div id="timer-progress" class="bg-emerald-500 h-full w-0 transition-all duration-1000"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <button id="sleep-mode-btn" onclick="requestSleepToggle()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-900 text-xs font-extrabold py-2.5 px-3 rounded-2xl border border-indigo-100 transition flex items-center justify-center gap-1.5 active:scale-95">
+                            <span>💤 Pause for Sleep</span>
+                        </button>
+                        <button id="btn-force-reset" onclick="requestActionConfirm('Reset timer?', forceResetTimer)" class="bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-extrabold py-2.5 px-3 rounded-2xl border border-slate-200 transition flex items-center justify-center gap-1.5 active:scale-95">
+                            <span>🔄 Reset Timer</span>
+                        </button>
+                    </div>
+
+                    <div class="w-full">
+                        <button id="btn-eat-drink" onclick="applyMealDrinkOffset()" class="w-full bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold py-3 rounded-xl border border-sky-200 transition flex flex-col items-center justify-center active:scale-95">
+                            <span class="text-sm">🥩 Just Ate or Drank 🥤</span>
+                            <span class="text-[9px] opacity-75 mt-0.5"><span class="urgency-offset-val">5</span> minutes sooner</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 shadow-sm border border-amber-100/60 flex flex-col gap-3 relative">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] text-slate-400 font-semibold">Hold any button to write custom notes</span>
+                    </div>
+
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 flex items-center justify-between">
+                        <label class="flex items-center gap-2 cursor-pointer touch-action-none w-full">
+                            <input type="checkbox" id="quick-awakening-toggle" class="w-4 h-4 rounded text-amber-500 border-slate-300 focus:ring-amber-400 accent-amber-500">
+                            <span class="text-xs font-bold text-slate-700"><span id="woke-up-emoji">☀️</span> <span class="puppy-name-text">Puppy</span> just woke up!</span>
+                        </label>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3.5">
+                        <div id="btn-hold-Pee" class="touch-action-none relative overflow-hidden flex flex-col items-center justify-center p-3.5 bg-sky-50 hover:bg-sky-100 active:scale-95 text-sky-900 rounded-2xl border border-sky-100 transition shadow-sm cursor-pointer select-none">
+                            <span class="text-3xl mb-1">💦</span>
+                            <span class="font-extrabold text-xs">Pee Only</span>
+                            <span class="text-[9px] text-sky-600 font-bold uppercase mt-0.5">Outside</span>
+                            <div class="hold-indicator" id="hold-indicator-Pee"></div>
+                        </div>
+
+                        <div id="btn-hold-Poo" class="touch-action-none relative overflow-hidden flex flex-col items-center justify-center p-3.5 bg-amber-50/80 hover:bg-amber-100 active:scale-95 text-amber-900 rounded-2xl border border-amber-100 transition shadow-sm cursor-pointer select-none">
+                            <span class="text-3xl mb-1">💩</span>
+                            <span class="font-extrabold text-xs">Poo Only</span>
+                            <span class="text-[9px] text-amber-700 font-bold uppercase mt-0.5">Outside</span>
+                            <div class="hold-indicator" id="hold-indicator-Poo"></div>
+                        </div>
+
+                        <div id="btn-hold-Both" class="touch-action-none relative overflow-hidden col-span-2 flex flex-col items-center justify-center p-3 bg-emerald-50 hover:bg-emerald-100 active:scale-95 text-emerald-900 rounded-2xl border border-emerald-100 transition shadow-sm cursor-pointer select-none">
+                            <span class="text-3xl mb-1">🌟</span>
+                            <span class="font-extrabold text-xs">Pee & Poo!</span>
+                            <span class="text-[9px] text-emerald-600 font-bold uppercase mt-0.5">YAY, <span class="puppy-name-text">Puppy</span>!</span>
+                            <div class="hold-indicator" id="hold-indicator-Both"></div>
+                        </div>
+
+                        <div id="btn-hold-Dry-Run" class="touch-action-none relative overflow-hidden flex flex-col items-center justify-center py-2.5 px-1 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-2xl border border-slate-200 active:scale-95 transition cursor-pointer select-none">
+                            <span class="text-lg mb-0.5">🌵</span>
+                            <span class="font-bold text-[11px]">Dry Run</span>
+                            <span id="dry-run-subtext" class="text-[8px] text-slate-400">Triggers 15m Crate Wait</span>
+                            <div class="hold-indicator" id="hold-indicator-Dry-Run"></div>
+                        </div>
+
+                        <button id="btn-accident" onclick="openAccidentModal()" class="flex flex-col items-center justify-center py-2.5 px-1 bg-rose-50 hover:bg-rose-100 text-rose-800 rounded-2xl border border-rose-100 active:scale-95 transition">
+                            <span class="text-lg mb-0.5">🚩</span>
+                            <span class="font-bold text-[11px]">Indoor Accident</span>
+                            <span class="text-[8px] text-rose-500">Shit Happens</span>
+                        </button>
+                    </div>
+
+                    <button onclick="openCustomLogModal()" class="mt-2 w-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 active:scale-95">
+                        <i class="fa-solid fa-calendar-plus text-slate-500"></i> Custom Entry
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 2: DAILY ENTRIES LOG LIST -->
+            <div id="screen-logs" class="screen-view hidden flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold brand-font text-slate-800 text-base">Household Potty Log</h3>
+                        <p class="text-[10px] text-slate-400">Poopfolio</p>
+                    </div>
+                    <button onclick="requestActionConfirm('Clear all logs?', triggerClearConfirm)" class="text-rose-600 hover:text-rose-800 text-xs font-bold bg-rose-50 hover:bg-rose-100 py-1.5 px-3 rounded-lg transition active:scale-95">
+                        <i class="fa-solid fa-trash-can"></i> Clear All
+                    </button>
+                </div>
+
+                <!-- Spans beautifully right to the edge, but handles internal list scrolling gracefully -->
+                <div class="flex flex-col gap-2.5 pr-1 flex-grow overflow-y-auto" id="log-cards-container"></div>
+
+                <div id="no-logs-msg" class="hidden flex flex-col items-center justify-center py-12 px-4 text-center">
+                    <span class="text-4xl mb-2">📋</span>
+                    <h4 class="font-bold text-slate-600 text-sm">No synchronized logs yet</h4>
+                    <p class="text-[11px] text-slate-400 max-w-xs mt-1 leading-relaxed">
+                        Track <span class="puppy-name-text">Puppy</span>'s next trip or drag "<span class="puppy-name-text">Puppy</span>_Potties_Template.xlsx" onto the Settings tab to populate the potty entries in bulk!
+                    </p>
+                </div>
+            </div>
+
+            <!-- SCREEN 3: ANALYTICS & RECURRING OUTINGS -->
+            <div id="screen-analytics" class="screen-view hidden flex flex-col gap-4">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h3 class="font-bold brand-font text-slate-800 text-base">Piss Patterns</h3>
+                        <p class="text-[10px] text-slate-400">Aggregated patterns & progression</p>
+                    </div>
+                    <div id="streak-badge" class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-emerald-300 flex items-center gap-1">
+                        <span id="streak-emoji" class="text-xs">🏆</span> <span id="streak-days">0</span> Day Streak!
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2.5">
+                    <div id="kpi-card-runs" class="bg-amber-50 border border-amber-100 rounded-2xl p-2 flex flex-col items-center text-center relative overflow-hidden transition-colors">
+                        <div class="text-[9px] uppercase font-bold text-amber-800 tracking-wider">7-Day Trips</div>
+                        <div id="kpi-total" class="text-xl font-black text-amber-950 mt-0.5">0</div>
+                        <div id="kpi-total-trend" class="text-[9px] font-bold mt-0.5">&nbsp;</div>
+                    </div>
+                    <div id="kpi-card-success" class="bg-emerald-50 border border-emerald-100 rounded-2xl p-2 flex flex-col items-center text-center relative overflow-hidden transition-colors">
+                        <div class="text-[9px] uppercase font-bold text-emerald-800 tracking-wider">7-Day Successes</div>
+                        <div id="kpi-success" class="text-xl font-black text-emerald-950 mt-0.5">0%</div>
+                        <div id="kpi-success-trend" class="text-[9px] font-bold mt-0.5">&nbsp;</div>
+                    </div>
+                    <div id="kpi-card-accidents" class="bg-rose-50 border border-rose-100 rounded-2xl p-2 flex flex-col items-center text-center relative overflow-hidden transition-colors">
+                        <div class="text-[9px] uppercase font-bold text-rose-800 tracking-wider">7-Day Accidents</div>
+                        <div id="kpi-accidents" class="text-xl font-black text-rose-950 mt-0.5">0</div>
+                        <div id="kpi-accidents-trend" class="text-[9px] font-bold mt-0.5">&nbsp;</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-3xl border border-slate-100 shadow-sm">
+                    <h4 class="text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-wider flex justify-between">
+                        <span>7-Day Success Trend</span>
+                    </h4>
+                    <div class="relative h-32 w-full">
+                        <canvas id="potty-trend-line-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-3xl border border-slate-100 shadow-sm mt-1">
+                    <h4 class="text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-wider">All-Time by Hour</h4>
+                    <div class="relative h-36 w-full">
+                        <canvas id="potty-hour-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Prediction Module -->
+                <div class="flex flex-col gap-2 mt-1 flex-shrink-0">
+                    <button id="btn-predict" onclick="predictNextPotty()" class="w-full bg-purple-50 hover:bg-purple-100 text-purple-900 text-xs font-bold py-3.5 rounded-2xl border border-purple-200 transition flex items-center justify-center gap-2 active:scale-95 shadow-sm">
+                        <span class="text-xl">🔮</span>
+                        <span class="tracking-wide uppercase">Potty Prediction 🧙‍♂️</span>
+                    </button>
+
+                    <div id="prediction-results" class="hidden bg-purple-50/50 border border-purple-100 rounded-3xl p-4 flex-col gap-3 shadow-sm">
+                        <div class="flex justify-between items-center border-b border-purple-100/50 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg">💦</span>
+                                <span class="text-[10px] uppercase font-bold text-purple-800 tracking-wider">Next Pee</span>
+                            </div>
+                            <span id="pred-pee-time" class="text-xs font-black text-purple-950">Consulting the orb...</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg">💩</span>
+                                <span class="text-[10px] uppercase font-bold text-amber-800 tracking-wider">Next Poo</span>
+                            </div>
+                            <span id="pred-poo-time" class="text-xs font-black text-amber-950">Consulting the orb...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="insights-suggestion" class="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-2xl p-4 flex gap-3 items-start shadow-sm mt-1 mb-2">
+                    <span class="text-2xl">💡</span>
+                    <div class="text-xs">
+                        <h5 class="font-extrabold mb-0.5 tracking-wide">Piss Patrol Recommendation:</h5>
+                        <p id="dynamic-training-advice" class="opacity-90 leading-relaxed text-[11px]">
+                            Log 5 or more events to sync and calculate custom hourly danger zones for <span class="puppy-name-text">Puppy</span>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 4: APP CONFIG & FILES (CONSOLIDATED SETTINGS VIEW) -->
+            <div id="screen-settings" class="screen-view hidden flex flex-col gap-4">
+                <div>
+                    <h3 class="font-bold brand-font text-slate-800 text-base">App & Sync Settings</h3>
+                    <p class="text-[10px] text-slate-400">Configure parameters, shared rooms, and excel logs</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-3xl border border-amber-100 shadow-sm flex flex-col gap-3">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wide">General Settings</h4>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase">Puppy Name</label>
+                        <input type="text" id="puppy-name-input" value="Puppy" oninput="changePuppyName(this.value)" class="border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 w-full focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                        <span class="text-xs font-bold text-slate-700">Dark Mode</span>
+                        <button onclick="toggleDarkTheme()" id="dark-theme-toggle" class="bg-slate-200 hover:bg-slate-300 transition text-slate-800 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                            <span id="dark-theme-status">💡 Off</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                        <div>
+                            <span class="text-xs font-bold text-slate-700 block">Push Notifications</span>
+                        </div>
+                        <button onclick="toggleNotifications()" id="notification-toggle" class="bg-slate-200 hover:bg-slate-300 transition text-slate-800 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                            <span id="notification-status">🔕 Off</span>
+                        </button>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100">
+                        <button id="btn-restore-defaults" onclick="requestActionConfirm('Restore defaults?', restoreDefaults)" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-800 text-xs font-bold py-2.5 rounded-xl border border-rose-100 transition flex items-center justify-center gap-1.5 active:scale-95">
+                            <i class="fa-solid fa-arrows-rotate"></i> Restore Defaults
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-3xl border border-amber-100 shadow-sm flex flex-col gap-3.5">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wide">Pacing Thresholds</h4>
+                    
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-500">Potty Interval:</span>
+                        <select id="interval-select" onchange="updateInterval(this.value)" class="bg-white border border-slate-200 rounded-lg p-1.5 text-xs font-extrabold text-amber-700 cursor-pointer">
+                            <option value="15">15m</option>
+                            <option value="30">30m</option>
+                            <option value="45">45m</option>
+                            <option value="60">60m</option>
+                            <option value="90">90m</option>
+                            <option value="120">2 Hours</option>
+                            <option value="180">3 Hours</option>
+                            <option value="240">4 Hours</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-500">Crate Wait:</span>
+                        <select id="crate-select" onchange="updateCrate(this.value)" class="bg-white border border-slate-200 rounded-lg p-1.5 text-xs font-extrabold text-amber-700 cursor-pointer">
+                            <option value="1">1m</option>
+                            <option value="2">2m</option>
+                            <option value="5">5m</option>
+                            <option value="10">10m</option>
+                            <option value="15">15m</option>
+                            <option value="20">20m</option>
+                            <option value="30">30m</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-500">Meal Offset:</span>
+                        <select id="urgency-select" onchange="updateUrgency(this.value)" class="bg-white border border-slate-200 rounded-lg p-1.5 text-xs font-extrabold text-amber-700 cursor-pointer">
+                            <option value="1">1m</option>
+                            <option value="2">2m</option>
+                            <option value="5">5m</option>
+                            <option value="10">10m</option>
+                            <option value="15">15m</option>
+                            <option value="20">20m</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-3xl border border-amber-100 shadow-sm flex flex-col gap-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wide">Sync House Room</h4>
+                        <span id="settings-synced-badge" class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-200">Synced</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        To sync with your household, copy and send them your active four-letter Household Code.
+                    </p>
+
+                    <div class="flex gap-2">
+                        <input type="text" id="household-code-input" readonly class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold tracking-wider text-slate-800 flex-grow text-center">
+                        <button onclick="copyHouseholdCode()" class="btn-sync-action bg-slate-800 hover:bg-slate-900 active:scale-95 transition text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-copy"></i> Copy
+                        </button>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-3 mt-1 flex flex-col gap-2">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase">Connect to existing code</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="household-join-input" placeholder="e.g. PAWS" class="border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold tracking-wider text-slate-700 w-full focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <button onclick="joinHouseholdRoom()" class="btn-sync-action bg-slate-800 hover:bg-slate-900 active:scale-95 transition text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap">
+                                Switch Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="dropzone" class="border-2 border-dashed border-amber-200 hover:border-amber-400 rounded-3xl p-5 flex flex-col items-center justify-center text-center cursor-pointer transition bg-amber-50/20 hover:bg-amber-50/40">
+                    <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="hidden">
+                    <span class="text-3xl mb-2 text-amber-600">📂</span>
+                    <h4 class="font-bold text-slate-700 text-xs">Import Template entries</h4>
+                    <p class="text-[10px] text-slate-400 max-w-sm mt-1">Tap here to choose your local spreadsheet file (like <span class="puppy-name-text">Puppy</span>_Potties_Template.xlsx) to upload historical entries.</p>
+                </div>
+
+                <div id="mapper-section" class="hidden bg-amber-50/80 border border-amber-200 p-4 rounded-2xl flex flex-col gap-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-[10px] text-amber-700 uppercase tracking-wider">Map Columns</h4>
+                        <span class="text-[9px] text-amber-700 font-bold" id="mapper-preview-count">0 rows detected</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                        <div>
+                            <label class="block font-bold text-slate-500 uppercase mb-0.5">Date Column</label>
+                            <select id="map-date" class="w-full rounded-lg border border-slate-200 p-1.5 bg-white font-semibold"></select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-500 uppercase mb-0.5">Time Column</label>
+                            <select id="map-time" class="w-full rounded-lg border border-slate-200 p-1.5 bg-white font-semibold"></select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-500 uppercase mb-0.5">Potty Type</label>
+                            <select id="map-type" class="w-full rounded-lg border border-slate-200 p-1.5 bg-white font-semibold"></select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-500 uppercase mb-0.5">Location Column</label>
+                            <select id="map-location" class="w-full rounded-lg border border-slate-200 p-1.5 bg-white font-semibold"></select>
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block font-bold text-slate-500 uppercase mb-0.5">Notes Column</label>
+                            <select id="map-notes" class="w-full rounded-lg border border-slate-200 p-1.5 bg-white font-semibold"></select>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-2 mt-1">
+                        <button onclick="cancelMapping()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-1 px-3 rounded-lg text-[10px] transition">Cancel</button>
+                        <button onclick="applyMapping()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1 px-3 rounded-lg text-[10px] transition">Complete Import</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button onclick="downloadSampleTemplate()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-file-arrow-down text-slate-400"></i> Sample Spreadsheet
+                    </button>
+                    <button onclick="exportCurrentLogs()" class="bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-file-excel text-amber-200"></i> Export Entries
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Pinned App Navigation: Styled securely absolute to sit stably on top of screen content -->
+        <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-3 py-2 flex justify-around items-center z-40 rounded-t-3xl shadow-2xl flex-shrink-0">
+            <button onclick="switchTab('schedule')" id="nav-schedule" class="nav-btn flex flex-col items-center gap-1 text-slate-400 font-semibold transition py-1 flex-1 nav-active">
+                <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wide">Schedule</span>
+            </button>
+            <button onclick="switchTab('logs')" id="nav-logs" class="nav-btn flex flex-col items-center gap-1 text-slate-400 font-semibold transition py-1 flex-1">
+                <i class="fa-solid fa-list-check text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wide">Entries</span>
+            </button>
+            <button onclick="switchTab('analytics')" id="nav-analytics" class="nav-btn flex flex-col items-center gap-1 text-slate-400 font-semibold transition py-1 flex-1">
+                <i class="fa-solid fa-chart-pie text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wide">Trends</span>
+            </button>
+            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex flex-col items-center gap-1 text-slate-400 font-semibold transition py-1 flex-1">
+                <i class="fa-solid fa-gears text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wide">Settings</span>
+            </button>
+        </nav>
+
+        <!-- MODAL: Custom Edit / Detailed Log Event -->
+        <div id="custom-log-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+            <div class="bg-white rounded-3xl p-5 w-full max-w-sm shadow-2xl border border-amber-50 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <h3 id="custom-modal-title" class="font-bold brand-font text-slate-800 text-base">Custom Entry</h3>
+                    <button type="button" onclick="closeCustomLogModal()" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-circle-xmark"></i></button>
+                </div>
+
+                <form id="custom-log-form" onsubmit="saveCustomLog(event)" class="flex flex-col gap-2.5">
+                    <input type="hidden" id="custom-log-id" value="">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Potty Date</label>
+                        <input type="date" id="custom-date" required class="w-full rounded-xl border border-slate-200 p-2 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-amber-400 focus:outline-none font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Potty Time</label>
+                        <input type="time" id="custom-time" step="1" required class="w-full rounded-xl border border-slate-200 p-2 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-amber-400 focus:outline-none font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Potty Category</label>
+                        <select id="custom-type" class="w-full rounded-xl border border-slate-200 p-2 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-amber-400 focus:outline-none font-semibold">
+                            <option value="Pee">💦 Pee (Outside Success)</option>
+                            <option value="Poo">💩 Poo (Outside Success)</option>
+                            <option value="Both">🌟 Both Pee & Poo (Outside Success)</option>
+                            <option value="Dry Run">🌵 Dry Run</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Specific Notes / Location</label>
+                        <input type="text" id="custom-notes" placeholder="e.g. Grass next to fence" class="w-full rounded-xl border border-slate-200 p-2.5 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-amber-400 focus:outline-none">
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                        <input type="checkbox" id="custom-awakening" class="w-4 h-4 rounded text-amber-500 border-slate-300 focus:ring-amber-400 accent-amber-500">
+                        <label for="custom-awakening" class="text-xs font-semibold text-slate-600 cursor-pointer">☀️ Occurred right after awakening</label>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-2">
+                        <button type="button" onclick="closeCustomLogModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-4 rounded-xl text-xs transition">Cancel</button>
+                        <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition shadow-md">Save Outing</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODAL: Inside Accident Log Details -->
+        <div id="accident-log-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+            <div class="bg-white rounded-3xl p-5 w-full max-w-sm shadow-2xl border border-rose-50 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold brand-font text-rose-800 text-base flex items-center gap-1.5">
+                        🚩 Record House Accident
+                    </h3>
+                    <button onclick="closeAccidentModal()" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-circle-xmark"></i></button>
+                </div>
+                
+                <p class="text-[10px] text-slate-400 leading-relaxed">Cheer up, it's a data point!</p>
+
+                <form id="accident-form" onsubmit="saveAccidentLog(event)" class="flex flex-col gap-2.5">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Accident Time</label>
+                        <input type="time" id="accident-time" step="1" required class="w-full rounded-xl border border-slate-200 p-2 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-400 focus:outline-none font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Accident Category</label>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            <label class="border border-slate-200 rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-50">
+                                <input type="radio" name="acc-type" value="Accident (Pee)" checked class="text-rose-500 focus:ring-rose-400">
+                                <span class="text-[11px] font-bold text-slate-700">💦 Pee</span>
+                            </label>
+                            <label class="border border-slate-200 rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-50">
+                                <input type="radio" name="acc-type" value="Accident (Poo)" class="text-rose-500 focus:ring-rose-400">
+                                <span class="text-[11px] font-bold text-slate-700">💩 Poo</span>
+                            </label>
+                            <label class="border border-slate-200 rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-50">
+                                <input type="radio" name="acc-type" value="Accident (Both)" class="text-rose-500 focus:ring-rose-400">
+                                <span class="text-[11px] font-bold text-slate-700">🌟 Both</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Accident Location</label>
+                        <select id="accident-location" class="w-full rounded-xl border border-slate-200 p-2 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-400 focus:outline-none font-semibold">
+                            <option value="By front door">By front door</option>
+                            <option value="By back door">By back door</option>
+                            <option value="Doggy bed">Doggy bed</option>
+                            <option value="Human bed">Human bed</option>
+                            <option value="Crate">Crate</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Notes / Description</label>
+                        <input type="text" id="accident-notes" placeholder="e.g. Right after drinking water" class="w-full rounded-xl border border-slate-200 p-2.5 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                        <input type="checkbox" id="accident-awakening" class="w-4 h-4 rounded text-rose-500 border-rose-300 focus:ring-rose-400 accent-rose-500">
+                        <label for="accident-awakening" class="text-xs font-semibold text-slate-600 cursor-pointer">☀️ Occurred right after awakening</label>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-2">
+                        <button type="button" onclick="closeAccidentModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-4 rounded-xl text-xs transition">Cancel</button>
+                        <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition shadow-md">Record Accident</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODAL: Tap and Hold Custom Quick Note Dialog -->
+        <div id="quick-hold-note-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+            <div class="bg-white rounded-3xl p-5 w-full max-w-sm shadow-2xl border border-amber-50 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold brand-font text-slate-800 text-base flex items-center gap-1.5">
+                        📝 Add Outing Note
+                    </h3>
+                    <button onclick="closeQuickHoldNoteModal()" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-circle-xmark"></i></button>
+                </div>
+                
+                <p class="text-[11px] text-slate-400">Saving a new <b id="hold-modal-type-display" class="text-slate-700"></b> record. Add custom details below:</p>
+
+                <div class="flex flex-col gap-3">
+                    <input type="text" id="hold-modal-input-text" placeholder="e.g. Played on grass next to back door" class="w-full rounded-xl border border-slate-200 p-3 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-amber-400 focus:outline-none font-medium">
+                    
+                    <div class="flex justify-end gap-2">
+                        <button onclick="closeQuickHoldNoteModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-4 rounded-xl text-xs transition">Cancel</button>
+                        <button onclick="saveQuickHoldNote()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition shadow-md">Log with Note</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: Universal Action Confirmation Dialog -->
+        <div id="action-confirm-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+            <div class="bg-white rounded-3xl p-5 w-full max-w-xs shadow-2xl border border-amber-50 flex flex-col gap-3 text-center">
+                <h3 id="action-confirm-title" class="font-extrabold text-slate-800 text-base">Confirm Action</h3>
+                <p id="action-confirm-desc" class="text-xs text-slate-500 hidden">Are you sure you want to do this?</p>
+                <div class="flex gap-2.5 mt-3">
+                    <button onclick="closeActionConfirm()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 px-3 rounded-xl flex-1 transition">Cancel</button>
+                    <button id="action-confirm-btn" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex-1 transition shadow-md">Yes, Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Float Notification Toasts inside Simulated Viewport -->
+        <div id="toast-container" class="absolute bottom-16 left-3 right-3 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    </div>
+
+    <!-- MAIN MODULE SCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, onSnapshot, collection, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global states exposed via standard Window mapping
+        window.logs = [];
+        window.rotationIntervalMinutes = 60; // Represents the user's "Potty Interval" config
+        window.crateWaitMinutes = 15;
+        window.urgencyOffsetMinutes = 5;
+        window.puppyName = "Puppy";
+        window.isDarkMode = false;
+        
+        // Push Notification States
+        window.notificationsEnabled = false;
+        window.activeCycleId = null;
+        window.hasNotifiedWarning = false;
+        window.hasNotifiedOverdue = false;
+        window.nativeAlarmId = 12345;
+        window.isCurrentCrateWait = false; 
+
+        window.timerModifierMinutes = 0; 
+        window.nextTripTime = null;
+        window.lastSuccessfulTripTime = null;
+        window.pottyChart = null;
+        window.trendChart = null;
+        window.tempExcelData = null;
+        window.currentHouseholdCode = '';
+        window.db = null;
+        window.auth = null;
+        
+        // Force the app path to remain static across all devices for direct live synchronization
+        window.appId = 'piss-patrol-sync-v1';
+        
+        window.isSleeping = false;
+        window.forceResetTimestamp = null;
+        window.sleepStartTimestamp = null;
+        window.sleepRemainingMs = null; // State to track active countdown freeze frames
+
+        // Default seed entries
+        const defaultLogs = [
+            { id: "1", date: "2026-06-22", time: "08:15:00", type: "Pee", location: "Outside Yard", notes: "☀️ (On Awakening)", createdAt: "2026-06-22T08:15:00.000Z" },
+            { id: "2", date: "2026-06-22", time: "10:30:00", type: "Dry Run", location: "Outside Yard", notes: "Dry run - Placed in crate", createdAt: "2026-06-22T10:30:00.000Z" },
+            { id: "3", date: "2026-06-22", time: "12:15:00", type: "Both", location: "Outside Yard", notes: "", createdAt: "2026-06-22T12:15:00.000Z" },
+            { id: "4", date: "2026-06-22", time: "15:45:00", type: "Accident (Pee)", location: "By front door", notes: "Shit Happens", createdAt: "2026-06-22T15:45:00.000Z" },
+            { id: "5", date: "2026-06-22", time: "18:20:00", type: "Pee", location: "Outside Yard", notes: "", createdAt: "2026-06-22T18:20:00.000Z" },
+            { id: "6", date: "2026-06-22", time: "21:30:00", type: "Poo", location: "Outside Yard", notes: "Bedtime trip", createdAt: "2026-06-22T21:30:00.000Z" }
+        ];
+
+        // Global Helper: Format 24-hour time string into 12-hour AM/PM format
+        window.formatTime12Hour = function(timeStr) {
+            if (!timeStr) return "";
+            const parts = timeStr.split(':');
+            if (parts.length < 2) return timeStr;
+            let hours = parseInt(parts[0], 10);
+            const minutes = parts[1];
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            return `${hours}:${minutes} ${ampm}`;
+        };
+
+        function parseLogDateTime(dateStr, timeStr) {
+            let fullTime = timeStr;
+            if (timeStr.split(':').length === 2) {
+                fullTime = `${timeStr}:00`;
+            }
+            const d = new Date(`${dateStr}T${fullTime}`);
+            if (isNaN(d.getTime())) {
+                try {
+                    const parts = dateStr.split('-');
+                    const timeParts = fullTime.split(':');
+                    return new Date(parts[0], parts[1] - 1, parts[2], timeParts[0], timeParts[1], timeParts[2]);
+                } catch(e) {
+                    return new Date();
+                }
+            }
+            return d;
+        }
+
+        window.compareLogsDescending = function(a, b) {
+            const parse = (d, t) => {
+                const parsed = parseLogDateTime(d, t);
+                return parsed.getTime();
+            };
+            const timeA = parse(a.date, a.time);
+            const timeB = parse(b.date, b.time);
+            if (timeB !== timeA) return timeB - timeA;
+            
+            const createdA = a.createdAt ? new Date(a.createdAt).getTime() : (isNaN(a.id) ? 0 : parseFloat(a.id));
+            const createdB = b.createdAt ? new Date(b.createdAt).getTime() : (isNaN(b.id) ? 0 : parseFloat(b.id));
+            if (createdB !== createdA && createdB && createdA) return createdB - createdA;
+            
+            return String(b.id).localeCompare(String(a.id));
+        };
+
+        function generateRoomCode() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let code = "";
+            for(let i=0; i<4; i++) code += letters.charAt(Math.floor(Math.random() * letters.length));
+            return code;
+        }
+
+        async function setupFirebase() {
+            try {
+                const firebaseConfig = {
+                  apiKey: "AIzaSyB0WUxAhTjoK6cS7XbLWSvtxfzA0waqf-U",
+                  authDomain: "piss-patrol.firebaseapp.com",
+                  projectId: "piss-patrol",
+                  storageBucket: "piss-patrol.firebasestorage.app",
+                  messagingSenderId: "745792900556",
+                  appId: "1:745792900556:web:c858bfbcf7032ef56a6169"
+                };
+
+                const app = initializeApp(firebaseConfig);
+                
+                window.db = initializeFirestore(app, {
+                    localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})
+                });
+                
+                window.auth = getAuth(app);
+
+                const creds = await signInAnonymously(window.auth);
+                const user = creds.user;
+
+                if (user) {
+                    document.getElementById('sync-dot').className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
+                    document.getElementById('sync-text').innerText = "Online Sync Mode";
+                    initializeHousehold();
+                } else {
+                    setOfflineFallback("Auth failed to instantiate user object");
+                }
+            } catch (err) {
+                console.error("Firebase startup issues: ", err);
+                setOfflineFallback("Offline Mode (Check Firebase Settings)");
+            }
+        }
+
+        function setOfflineFallback(reason) {
+            console.warn("Using offline localStorage fallback because: " + reason);
+            document.getElementById('sync-dot').className = "w-1.5 h-1.5 rounded-full bg-rose-400";
+            document.getElementById('sync-text').innerText = "LocalStorage Mode";
+            
+            const offlineHousehold = 'ROOM-LOCAL';
+            window.currentHouseholdCode = offlineHousehold;
+            document.getElementById('household-code-input').value = offlineHousehold;
+
+            const saved = localStorage.getItem('mitzi_potty_logs_offline');
+            if (saved) {
+                try { window.logs = JSON.parse(saved); } catch(e) { window.logs = [...defaultLogs]; }
+            } else {
+                window.logs = [...defaultLogs];
+                localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify(window.logs));
+            }
+            recalculateSchedule();
+            renderLogsTable();
+            if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
+        }
+
+        function initializeHousehold() {
+            let householdCode = localStorage.getItem('mitzi_household_code');
+            if (!householdCode) {
+                householdCode = generateRoomCode();
+                localStorage.setItem('mitzi_household_code', householdCode);
+            }
+            window.currentHouseholdCode = householdCode;
+            document.getElementById('household-code-input').value = householdCode;
+            startHouseholdSyncListener();
+        }
+
+        let activeSnapshotUnsubscribe = null;
+        let activeSettingsUnsubscribe = null;
+
+        window.startHouseholdSyncListener = function() {
+            if (activeSnapshotUnsubscribe) activeSnapshotUnsubscribe();
+            if (activeSettingsUnsubscribe) activeSettingsUnsubscribe();
+
+            if (!window.db || !window.auth || !window.auth.currentUser) {
+                setOfflineFallback("No Database active");
+                return;
+            }
+
+            document.getElementById('sync-dot').className = "w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse";
+            document.getElementById('sync-text').innerText = "Syncing Room...";
+
+            const logsCollectionRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'logs');
+
+            activeSnapshotUnsubscribe = onSnapshot(logsCollectionRef, (querySnapshot) => {
+                const fetchedLogs = [];
+                querySnapshot.forEach((doc) => {
+                    if (doc.data().householdId === window.currentHouseholdCode) {
+                        fetchedLogs.push({ id: doc.id, ...doc.data() });
+                    }
+                });
+
+                window.logs = fetchedLogs;
+                recalculateSchedule();
+                renderLogsTable();
+                
+                if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
+
+                document.getElementById('sync-dot').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                document.getElementById('sync-text').innerText = `Synced: ${window.currentHouseholdCode}`;
+            }, (error) => {
+                showToast("Real-time synchronization paused. Retrying...", "warning");
+                document.getElementById('sync-dot').className = "w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce";
+            });
+
+            const settingsDocRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'settings', window.currentHouseholdCode);
+            activeSettingsUnsubscribe = onSnapshot(settingsDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.rotationIntervalMinutes) {
+                        window.rotationIntervalMinutes = data.rotationIntervalMinutes;
+                        const select = document.getElementById('interval-select');
+                        if (select) select.value = window.rotationIntervalMinutes;
+                    }
+                    if (data.crateWaitMinutes) {
+                        window.crateWaitMinutes = data.crateWaitMinutes;
+                        const select = document.getElementById('crate-select');
+                        if (select) select.value = window.crateWaitMinutes;
+                        window.updateDryRunText();
+                    }
+                    if (data.urgencyOffsetMinutes) {
+                        window.urgencyOffsetMinutes = data.urgencyOffsetMinutes;
+                        const select = document.getElementById('urgency-select');
+                        if (select) select.value = window.urgencyOffsetMinutes;
+                        updateUrgencyOffsetsInUI();
+                    }
+                    if (data.puppyName !== undefined) {
+                        window.puppyName = data.puppyName;
+                        const input = document.getElementById('puppy-name-input');
+                        // PREVENT JUMPING FOCUS FORCE REVERT: Only update the text field's value if it's NOT currently focused
+                        if (input && document.activeElement !== input) {
+                            input.value = window.puppyName;
+                        }
+                        updatePuppyNameReferences();
+                    }
+                    if (data.timerModifierMinutes !== undefined) window.timerModifierMinutes = data.timerModifierMinutes;
+                    if (data.isSleeping !== undefined) {
+                        window.isSleeping = data.isSleeping;
+                        updateSleepUI();
+                    }
+                    if (data.sleepRemainingMs !== undefined) {
+                        window.sleepRemainingMs = data.sleepRemainingMs;
+                    }
+                    if (data.forceResetTimestamp !== undefined) window.forceResetTimestamp = data.forceResetTimestamp ? new Date(data.forceResetTimestamp) : null;
+                    if (data.sleepStartTimestamp !== undefined) window.sleepStartTimestamp = data.sleepStartTimestamp ? new Date(data.sleepStartTimestamp) : null;
+                    recalculateSchedule();
+                } else {
+                    window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes, window.isSleeping, window.forceResetTimestamp, window.sleepStartTimestamp, window.sleepRemainingMs);
+                }
+            });
+        };
+
+        window.saveSettingsToSync = async function(rotationVal, modifierVal, sleepVal = undefined, resetTimeVal = undefined, sleepStartVal = undefined, sleepRemainingMsVal = undefined) {
+            window.rotationIntervalMinutes = rotationVal;
+            window.timerModifierMinutes = modifierVal;
+            
+            // Checking against undefined allows explicit passing of 'null' to cleanly clear values
+            if (sleepVal !== undefined) window.isSleeping = sleepVal;
+            if (resetTimeVal !== undefined) window.forceResetTimestamp = resetTimeVal;
+            if (sleepStartVal !== undefined) window.sleepStartTimestamp = sleepStartVal;
+            if (sleepRemainingMsVal !== undefined) window.sleepRemainingMs = sleepRemainingMsVal;
+
+            if (!window.db || !window.auth || !window.auth.currentUser) {
+                localStorage.setItem('mitzi_potty_interval', rotationVal);
+                localStorage.setItem('mitzi_crate_wait', window.crateWaitMinutes);
+                localStorage.setItem('mitzi_urgency_offset', window.urgencyOffsetMinutes);
+                localStorage.setItem('mitzi_puppy_name', window.puppyName);
+                localStorage.setItem('mitzi_timer_modifier', modifierVal);
+                localStorage.setItem('mitzi_is_sleeping', window.isSleeping);
+                localStorage.setItem('mitzi_force_reset', window.forceResetTimestamp ? window.forceResetTimestamp.toISOString() : '');
+                localStorage.setItem('mitzi_sleep_start', window.sleepStartTimestamp ? window.sleepStartTimestamp.toISOString() : '');
+                localStorage.setItem('mitzi_sleep_remaining_ms', window.sleepRemainingMs !== null && window.sleepRemainingMs !== undefined ? String(window.sleepRemainingMs) : '');
+                recalculateSchedule();
+                return;
+            }
+            try {
+                const settingsDocRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'settings', window.currentHouseholdCode);
+                await setDoc(settingsDocRef, {
+                    rotationIntervalMinutes: rotationVal, crateWaitMinutes: window.crateWaitMinutes, urgencyOffsetMinutes: window.urgencyOffsetMinutes,
+                    puppyName: window.puppyName, timerModifierMinutes: modifierVal, isSleeping: window.isSleeping,
+                    forceResetTimestamp: window.forceResetTimestamp ? window.forceResetTimestamp.toISOString() : null,
+                    sleepStartTimestamp: window.sleepStartTimestamp ? window.sleepStartTimestamp.toISOString() : null,
+                    sleepRemainingMs: window.sleepRemainingMs !== undefined && window.sleepRemainingMs !== null ? window.sleepRemainingMs : null,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+            } catch (err) { console.error("Error writing settings: ", err); }
+        };
+
+        window.savePottyRecordToSync = async function(record, idToUpdate = null) {
+            const parsedRecordTime = parseLogDateTime(record.date, record.time).getTime();
+            
+            // Check if this record is the chronologically newest record in the entire app
+            const hasNewerLog = window.logs.some(l => {
+                if (idToUpdate && l.id === idToUpdate) return false;
+                return parseLogDateTime(l.date, l.time).getTime() > parsedRecordTime;
+            });
+
+            // If we are logging or editing the most recent event, clear all manual timer overrides
+            // Null explicitly passed to gracefully clear the force reset state
+            if (!hasNewerLog) {
+                window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null);
+            }
+
+            if (!window.db || !window.auth || !window.auth.currentUser) {
+                if (idToUpdate) {
+                    const idx = window.logs.findIndex(l => l.id === idToUpdate);
+                    if (idx > -1) window.logs[idx] = { ...window.logs[idx], ...record };
+                } else {
+                    const offlineId = `offline-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                    const offlineRecord = { id: offlineId, createdAt: new Date().toISOString(), ...record };
+                    window.logs.push(offlineRecord);
+                }
+                localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify(window.logs));
+                recalculateSchedule(); renderLogsTable();
+                if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
+                return;
+            }
+
+            try {
+                const logsCollectionRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'logs');
+                const docId = idToUpdate || `log-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+                const docRef = doc(logsCollectionRef, docId);
+                
+                const dataToSave = idToUpdate ? { ...record, updatedAt: new Date().toISOString() } : { ...record, householdId: window.currentHouseholdCode, createdAt: new Date().toISOString() };
+                await setDoc(docRef, dataToSave, { merge: true });
+            } catch (err) {
+                console.error("Error writing document to Firebase:", err);
+                showToast("Sync issue - record saved locally.", "warning");
+            }
+        };
+
+        window.deletePottyRecordFromSync = async function(id) {
+            if (!window.db || !window.auth || !window.auth.currentUser) {
+                window.logs = window.logs.filter(l => l.id !== id);
+                localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify(window.logs));
+                recalculateSchedule(); renderLogsTable();
+                if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
+                playChime('success');
+                return;
+            }
+
+            try {
+                const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'logs', id);
+                await deleteDoc(docRef);
+                showToast("Entry deleted.");
+                playChime('success');
+            } catch (err) { console.error("Deletion error:", err); }
+        };
+
+        // --- ACTION CONFIRMATION MODAL LOGIC ---
+        let pendingConfirmActionFn = null;
+        
+        window.requestActionConfirm = function(title, callbackFn) {
+            const isDanger = title.toLowerCase().includes("clear") || title.toLowerCase().includes("restore");
+            const btn = document.getElementById('action-confirm-btn');
+            
+            document.getElementById('action-confirm-title').innerText = title;
+            document.getElementById('action-confirm-title').className = isDanger ? "font-extrabold text-rose-800 text-base" : "font-extrabold text-slate-800 text-base";
+            
+            document.getElementById('action-confirm-desc').classList.add('hidden');
+            
+            btn.className = isDanger ? "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex-1 transition shadow-md" : "bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex-1 transition shadow-md";
+            btn.innerText = "Yes, Confirm";
+            
+            pendingConfirmActionFn = callbackFn;
+            document.getElementById('action-confirm-modal').classList.remove('hidden');
+        };
+
+        window.closeActionConfirm = function() {
+            document.getElementById('action-confirm-modal').classList.add('hidden');
+            pendingConfirmActionFn = null;
+        };
+
+        document.getElementById('action-confirm-btn').addEventListener('click', () => {
+            if (pendingConfirmActionFn) pendingConfirmActionFn();
+            closeActionConfirm();
+        });
+
+        window.triggerClearConfirm = function() { window.clearSyncRoomEntirely(); };
+
+        window.clearSyncRoomEntirely = async function() {
+            if (!window.db || !window.auth || !window.auth.currentUser) {
+                window.logs = []; localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify([]));
+                window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null); recalculateSchedule(); renderLogsTable();
+                if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
+                showToast("Offline local memory cleared", "warning"); 
+                playChime('success');
+                return;
+            }
+
+            showToast("Wiping shared room. Please wait...", "warning");
+            try {
+                window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null);
+                const logsToDelete = [...window.logs];
+                if (logsToDelete.length === 0) {
+                    playChime('success');
+                    return;
+                }
+
+                const chunkSize = 500;
+                for (let i = 0; i < logsToDelete.length; i += chunkSize) {
+                    const batch = writeBatch(window.db);
+                    const chunk = logsToDelete.slice(i, i + chunkSize);
+                    chunk.forEach((item) => {
+                        const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'logs', item.id);
+                        batch.delete(docRef);
+                    });
+                    await batch.commit();
+                }
+                showToast("All shared room history wiped!", "warning");
+                playChime('success');
+            } catch (err) { showToast("Failed to clear shared room. Try again.", "warning"); }
+        };
+
+        // --- NOTIFICATION & CHIMES LOGIC ---
+        function sendOSNotification(title, body) {
+            if (!window.notificationsEnabled || Notification.permission !== "granted") return;
+            try {
+                new Notification(title, {
+                    body: body,
+                    icon: "icon.png",
+                    badge: "icon.png",
+                    tag: 'piss-patrol-alert', renotify: true
+                });
+            } catch (e) { console.warn("Notification error:", e); }
+        }
+
+        window.scheduleNativeAlarms = async function() {
+            if (!window.notificationsEnabled) return;
+            if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
+                const LocalNotifications = window.Capacitor.Plugins.LocalNotifications;
+                
+                try {
+                    await LocalNotifications.createChannel({
+                        id: 'potty-alerts',
+                        name: 'Potty Alerts',
+                        description: 'Critical timer alerts for Piss Patrol',
+                        importance: 5, 
+                        visibility: 1, 
+                        vibration: true
+                    });
+                } catch(e) {}
+
+                try {
+                    await LocalNotifications.cancel({ notifications: [{ id: 1 }, { id: 2 }] });
+
+                    if (window.isSleeping || !window.nextTripTime) return;
+
+                    const targetMs = window.nextTripTime.getTime();
+                    const nowMs = Date.now();
+                    const fiveMinsBefore = new Date(targetMs - (5 * 60 * 1000));
+                    const pendingAlarms = [];
+
+                    if (fiveMinsBefore.getTime() > nowMs) {
+                        pendingAlarms.push({
+                            title: window.isCurrentCrateWait ? "📦 Crate wait ending soon" : "🐶 Heads Up!",
+                            body: window.isCurrentCrateWait ? `${window.puppyName || "Puppy"}'s crate time is almost up.` : `${window.puppyName || "Puppy"} needs to go out in 5 minutes!`,
+                            id: 1, 
+                            schedule: { at: fiveMinsBefore }, 
+                            channelId: 'potty-alerts',
+                            sound: null
+                        });
+                    }
+
+                    if (targetMs > nowMs) {
+                        pendingAlarms.push({
+                            title: window.isCurrentCrateWait ? "📦 Crate Wait Over!" : "🚨 Time to Potty!",
+                            body: window.isCurrentCrateWait ? `Take ${window.puppyName || "Puppy"} outside to try again.` : `The timer expired! Take ${window.puppyName || "Puppy"} outside right now.`,
+                            id: 2, 
+                            schedule: { at: window.nextTripTime }, 
+                            channelId: 'potty-alerts',
+                            sound: null 
+                        });
+                    }
+
+                    if (pendingAlarms.length > 0) {
+                        await LocalNotifications.schedule({ notifications: pendingAlarms });
+                    }
+                } catch (e) { console.error("Failed to schedule advanced background local notifications:", e); }
+            }
+        };
+
+        function updateNotificationUI() {
+            const toggleBtn = document.getElementById('notification-toggle');
+            if (!toggleBtn) return;
+            if (window.notificationsEnabled) toggleBtn.innerHTML = "<span>🔔 On</span>";
+            else toggleBtn.innerHTML = "<span>🔕 Off</span>";
+        }
+
+        async function toggleNotifications() {
+            if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
+                const LocalNotifications = window.Capacitor.Plugins.LocalNotifications;
+                if (window.notificationsEnabled) {
+                    window.notificationsEnabled = false; localStorage.setItem('mitzi_notifications', 'false');
+                    await LocalNotifications.cancel({ notifications: [{ id: 1 }, { id: 2 }] });
+                    updateNotificationUI(); showToast("Push notifications disabled.");
+                    playChime('success');
+                } else {
+                    const permStatus = await LocalNotifications.requestPermissions();
+                    if (permStatus.display === 'granted') {
+                        window.notificationsEnabled = true; localStorage.setItem('mitzi_notifications', 'true');
+                        updateNotificationUI(); showToast("Push notifications enabled!");
+                        await window.scheduleNativeAlarms();
+                        playChime('success');
+                    } else { showToast("Notifications blocked in device settings.", "warning"); }
+                }
+                return;
+            }
+
+            if (!("Notification" in window)) { showToast("Your browser doesn't support OS notifications.", "warning"); return; }
+            if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') { showToast("Push alerts require secure HTTPS hosting.", "warning"); return; }
+
+            if (window.notificationsEnabled) {
+                window.notificationsEnabled = false; localStorage.setItem('mitzi_notifications', 'false');
+                updateNotificationUI(); showToast("Push notifications disabled.");
+                playChime('success');
+            } else {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        window.notificationsEnabled = true; localStorage.setItem('mitzi_notifications', 'true');
+                        updateNotificationUI(); showToast("Push notifications enabled!");
+                        playChime('success');
+                    } else { showToast("Notifications blocked. Ensure you haven't blocked the site.", "warning"); }
+                });
+            }
+        }
+        window.toggleNotifications = toggleNotifications;
+
+        function playChime(type = 'success') {
+            try {
+                const audioFile = type === 'success' ? 'PissPatrol_Confirmation.mp3' : 'PissPatrol_Notification.mp3';
+                const audio = new Audio(audioFile);
+                
+                audio.play().catch(err => {
+                    console.warn("Real audio play blocked or file missing. Falling back to synth chime:", err);
+                    playSynthesizedChimeFallback(type);
+                });
+            } catch (err) {
+                console.warn("Web Audio object construction issue. Falling back to synth:", err);
+                playSynthesizedChimeFallback(type);
+            }
+        }
+        window.playChime = playChime;
+
+        function playSynthesizedChimeFallback(type) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (type === 'success') {
+                    const osc1 = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+                    osc1.type = 'sine'; osc1.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
+                    osc1.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); osc1.start(); osc1.stop(audioCtx.currentTime + 0.1);
+                    setTimeout(() => {
+                        const osc2 = audioCtx.createOscillator(); const gain2 = audioCtx.createGain();
+                        osc2.type = 'sine'; osc2.frequency.setValueAtTime(698.46, audioCtx.currentTime); 
+                        osc2.connect(gain2); gain2.connect(audioCtx.destination);
+                        gain2.gain.setValueAtTime(0.1, audioCtx.currentTime); osc2.start(); osc2.stop(audioCtx.currentTime + 0.2);
+                    }, 120);
+                } else {
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(329.63, audioCtx.currentTime); 
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.6);
+                }
+            } catch (err) { console.warn("Synthesizer audio context completely locked:", err); }
+        }
+
+        const holdStates = {};
+        const HOLD_DURATION = 500;
+
+        function setupHoldButtonEvents(typeId) {
+            const el = document.getElementById(`btn-hold-${typeId}`);
+            const indicator = document.getElementById(`hold-indicator-${typeId}`);
+            if (!el) return;
+
+            holdStates[typeId] = {
+                timerId: null, isLongPress: false, normalizedType: typeId === 'Dry-Run' ? 'Dry Run' : typeId,
+                startX: 0, startY: 0, hasMoved: false, isTouch: false
+            };
+            const dragThreshold = 10;
+
+            const startHold = (clientX, clientY, isTouch) => {
+                const state = holdStates[typeId];
+                state.startX = clientX; state.startY = clientY;
+                state.hasMoved = false; state.isLongPress = false; state.isTouch = isTouch;
+                indicator.style.transition = 'width 0.5s linear'; indicator.style.width = '100%';
+                if (state.timerId) clearTimeout(state.timerId);
+
+                state.timerId = setTimeout(() => {
+                    if (!state.hasMoved) {
+                        state.isLongPress = true; indicator.style.transition = 'none'; indicator.style.width = '0%';
+                        openQuickHoldNoteModal(state.normalizedType);
+                    }
+                }, HOLD_DURATION);
+            };
+
+            const moveHold = (clientX, clientY) => {
+                const state = holdStates[typeId];
+                if (!state.timerId) return;
+                const dist = Math.sqrt(Math.pow(clientX - state.startX, 2) + Math.pow(clientY - state.startY, 2));
+                if (dist > dragThreshold) {
+                    state.hasMoved = true; clearTimeout(state.timerId); state.timerId = null;
+                    indicator.style.transition = 'none'; indicator.style.width = '0%';
+                }
+            };
+
+            const endHold = (isTouch, e) => {
+                const state = holdStates[typeId];
+                if (isTouch && !state.isTouch) return;
+                if (!isTouch && state.isTouch) return;
+
+                const hadTimer = !!state.timerId;
+                clearTimeout(state.timerId); state.timerId = null;
+                indicator.style.transition = 'none'; indicator.style.width = '0%';
+
+                if (!state.hasMoved) {
+                    if (hadTimer && !state.isLongPress) {
+                        let confirmActionStr = state.normalizedType;
+                        let confirmTitle = `Log ${confirmActionStr}?`;
+                        if (confirmActionStr === 'Both') confirmTitle = `Log Pee & Poo?`;
+                        
+                        window.requestActionConfirm(
+                            confirmTitle, 
+                            () => { logQuickPotty(state.normalizedType); }
+                        );
+                        if (isTouch && e && e.cancelable) e.preventDefault();
+                    }
+                }
+                state.isLongPress = false; state.hasMoved = false;
+            };
+
+            const cancelHold = () => {
+                const state = holdStates[typeId];
+                clearTimeout(state.timerId); state.timerId = null;
+                indicator.style.transition = 'none'; indicator.style.width = '0%';
+                state.isLongPress = false; state.hasMoved = false;
+            };
+
+            el.addEventListener('touchstart', (e) => { if (e.touches.length > 1) return; startHold(e.touches[0].clientX, e.touches[0].clientY, true); }, { passive: true });
+            el.addEventListener('touchmove', (e) => { if (e.touches.length === 0) return; moveHold(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            el.addEventListener('touchend', (e) => { endHold(true, e); setTimeout(() => { if (holdStates[typeId]) holdStates[typeId].isTouch = false; }, 600); }, { passive: false });
+            el.addEventListener('touchcancel', () => cancelHold(), { passive: true });
+            el.addEventListener('mousedown', (e) => { if (holdStates[typeId].isTouch) return; if (e.button !== 0) return; startHold(e.clientX, e.clientY, false); });
+            el.addEventListener('mousemove', (e) => { if (holdStates[typeId].isTouch) return; moveHold(e.clientX, e.clientY); });
+            el.addEventListener('mouseup', (e) => { if (holdStates[typeId].isTouch) return; endHold(false, e); });
+            el.addEventListener('mouseleave', () => cancelHold());
+        }
+
+        let pendingQuickHoldType = '';
+        function openQuickHoldNoteModal(type) {
+            pendingQuickHoldType = type;
+            document.getElementById('hold-modal-type-display').innerText = type;
+            document.getElementById('hold-modal-input-text').value = '';
+            document.getElementById('quick-hold-note-modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('hold-modal-input-text').focus(), 100);
+        }
+        window.openQuickHoldNoteModal = openQuickHoldNoteModal;
+        window.closeQuickHoldNoteModal = function() { document.getElementById('quick-hold-note-modal').classList.add('hidden'); pendingQuickHoldType = ''; };
+
+        window.saveQuickHoldNote = function() {
+            const customText = document.getElementById('hold-modal-input-text').value.trim();
+            const isAwakening = document.getElementById('quick-awakening-toggle').checked;
+            let notes = customText;
+            if (isAwakening) notes = notes ? `${notes} ☀️ (On Awakening)` : "☀️ (On Awakening)";
+
+            const record = { date: getTodayString(), time: getCurrentTimeString(), type: pendingQuickHoldType, location: pendingQuickHoldType === 'Dry Run' ? 'Outside Yard' : 'Outside', notes };
+            window.savePottyRecordToSync(record);
+            document.getElementById('quick-awakening-toggle').checked = false;
+            window.closeQuickHoldNoteModal();
+            const dispName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            showToast(`Logged ${dispName}'s ${pendingQuickHoldType} with notes!`); playChime('success');
+        };
+
+        window.updateInterval = function(val) { window.saveSettingsToSync(parseInt(val), window.timerModifierMinutes); };
+        window.updateCrate = function(val) { window.crateWaitMinutes = parseInt(val); window.updateDryRunText(); window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes); };
+        window.updateUrgency = function(val) { window.urgencyOffsetMinutes = parseInt(val); updateUrgencyOffsetsInUI(); window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes); };
+
+        function changePuppyName(val) {
+            // Avoid active trimming and blank resets during active typing on mobile devices
+            window.puppyName = val; 
+            updatePuppyNameReferences();
+            window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes);
+        }
+        window.changePuppyName = changePuppyName;
+
+        function updatePuppyNameReferences() {
+            const displayName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            document.querySelectorAll('.puppy-name-text').forEach(el => el.innerText = displayName);
+            recalculateSchedule();
+            if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
+        }
+        window.updatePuppyNameReferences = updatePuppyNameReferences;
+
+        function updateUrgencyOffsetsInUI() { document.querySelectorAll('.urgency-offset-val').forEach(el => el.innerText = window.urgencyOffsetMinutes); }
+        window.updateDryRunText = function() { const el = document.getElementById('dry-run-subtext'); if (el) el.innerText = `Triggers ${window.crateWaitMinutes}m Crate Wait`; };
+        window.updateWokeUpEmoji = function() { const el = document.getElementById('woke-up-emoji'); if (el) el.innerText = window.isDarkMode ? "🌙" : "☀️"; };
+
+        window.restoreDefaults = function() {
+            window.puppyName = "Puppy"; window.rotationIntervalMinutes = 60; window.crateWaitMinutes = 15; window.urgencyOffsetMinutes = 5;
+            window.isDarkMode = false; window.isSleeping = false; window.sleepStartTimestamp = null; window.forceResetTimestamp = null; window.sleepRemainingMs = null; window.notificationsEnabled = false;
+            
+            document.getElementById('puppy-name-input').value = "Puppy";
+            document.getElementById('interval-select').value = "60";
+            document.getElementById('crate-select').value = "15";
+            document.getElementById('urgency-select').value = "5";
+            
+            const container = document.getElementById('phone-container'); container.classList.remove('dark-theme');
+            localStorage.setItem('mitzi_dark_theme', 'false'); localStorage.setItem('mitzi_notifications', 'false');
+            const toggleBtn = document.getElementById('dark-theme-toggle'); if (toggleBtn) toggleBtn.innerHTML = "<span>💡 Off</span>";
+            
+            updateNotificationUI(); window.saveSettingsToSync(60, 0, false, null, null, null);
+            updatePuppyNameReferences(); updateUrgencyOffsetsInUI(); window.updateDryRunText(); window.updateWokeUpEmoji(); updateSleepUI();
+            
+            if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
+                window.Capacitor.Plugins.LocalNotifications.cancel({ notifications: [{ id: 1 }, { id: 2 }] });
+            }
+            showToast("Restored all factory defaults!"); playChime('success');
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('nav-active'));
+            document.querySelectorAll('.screen-view').forEach(screen => screen.classList.add('hidden'));
+            document.getElementById(`nav-${tabId}`).classList.add('nav-active');
+            document.getElementById(`screen-${tabId}`).classList.remove('hidden');
+            if (tabId === 'analytics') renderCharts();
+        }
+        window.switchTab = switchTab;
+
+        function toggleDarkTheme() {
+            window.isDarkMode = !window.isDarkMode;
+            localStorage.setItem('mitzi_dark_theme', window.isDarkMode);
+            applyDarkThemeClasses();
+            playChime('success');
+        }
+        window.toggleDarkTheme = toggleDarkTheme;
+
+        function applyDarkThemeClasses() {
+            const container = document.getElementById('phone-container');
+            const toggleBtn = document.getElementById('dark-theme-toggle');
+            if (window.isDarkMode) {
+                container.classList.add('dark-theme'); if (toggleBtn) toggleBtn.innerHTML = "<span>🌙 On</span>";
+            } else {
+                container.classList.remove('dark-theme'); if (toggleBtn) toggleBtn.innerHTML = "<span>💡 Off</span>";
+            }
+            window.updateWokeUpEmoji();
+            if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-2 px-3 py-2.5 rounded-2xl shadow-lg border text-[11px] font-bold transition duration-300 transform translate-y-2 pointer-events-auto bg-white`;
+            
+            if (type === 'success') { toast.classList.add('border-emerald-100', 'text-emerald-800'); toast.innerHTML = `🌟 <span>${message}</span>`; } 
+            else if (type === 'warning') { toast.classList.add('border-rose-100', 'text-rose-800'); toast.innerHTML = `🚩 <span>${message}</span>`; } 
+            else { toast.classList.add('border-slate-100', 'text-slate-800'); toast.innerHTML = `ℹ️ <span>${message}</span>`; }
+
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-2'), 10);
+            setTimeout(() => { toast.classList.add('opacity-0', '-translate-y-2'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+        window.showToast = showToast;
+
+        function getTodayString() {
+            const today = new Date(); return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        }
+
+        function getCurrentTimeString(includeSeconds = true) {
+            const today = new Date();
+            const hh = String(today.getHours()).padStart(2, '0');
+            const mm = String(today.getMinutes()).padStart(2, '0');
+            if (includeSeconds) {
+                const ss = String(today.getSeconds()).padStart(2, '0');
+                return `${hh}:${mm}:${ss}`;
+            }
+            return `${hh}:${mm}`;
+        }
+
+        // --- TIMER & CALCULATIONS ---
+        function recalculateSchedule() {
+            if (window.isSleeping) {
+                window.nextTripTime = null;
+                window.scheduleNativeAlarms();
+                return;
+            }
+
+            const allLogs = [...window.logs].sort(window.compareLogsDescending);
+            
+            // Case 1: No logs exist at all
+            if (allLogs.length === 0) {
+                if (window.forceResetTimestamp) {
+                    window.lastSuccessfulTripTime = window.forceResetTimestamp;
+                    const baseMs = window.rotationIntervalMinutes * 60 * 1000;
+                    const modifierMs = (window.timerModifierMinutes || 0) * 60 * 1000;
+                    window.nextTripTime = new Date(window.forceResetTimestamp.getTime() + baseMs + modifierMs);
+                } else {
+                    window.lastSuccessfulTripTime = null; window.nextTripTime = null;
+                    document.getElementById('header-timer-text').innerText = 'No History';
+                }
+                window.isCurrentCrateWait = false;
+                updateCountdownClock(); window.scheduleNativeAlarms(); return;
+            }
+
+            // Case 2: We have logs. The absolute most recent log is king.
+            const latestLog = allLogs[0];
+            const parsedLastTime = parseLogDateTime(latestLog.date, latestLog.time);
+            
+            // Check if the user manually hit "Reset Timer" AFTER this latest log occurred
+            const isForceResetNewer = window.forceResetTimestamp && window.forceResetTimestamp.getTime() > parsedLastTime.getTime();
+
+            if (isForceResetNewer) {
+                // Manual timer reset takes precedence
+                window.isCurrentCrateWait = false;
+                window.lastSuccessfulTripTime = window.forceResetTimestamp;
+                const baseMs = window.rotationIntervalMinutes * 60 * 1000;
+                const modifierMs = (window.timerModifierMinutes || 0) * 60 * 1000;
+                window.nextTripTime = new Date(window.forceResetTimestamp.getTime() + baseMs + modifierMs);
+            } else {
+                // The most recent chronological log strictly dictates the schedule
+                window.lastSuccessfulTripTime = parsedLastTime;
+                
+                if (latestLog.type === 'Dry Run') {
+                    window.isCurrentCrateWait = true;
+                    // Dry run uses crateWaitMinutes and ignores meal/drink modifiers
+                    window.nextTripTime = new Date(parsedLastTime.getTime() + (window.crateWaitMinutes * 60 * 1000));
+                } else {
+                    window.isCurrentCrateWait = false;
+                    // Any other event (Pee, Poo, Both, Accidents) triggers the standard countdown rotation
+                    const baseMs = window.rotationIntervalMinutes * 60 * 1000;
+                    const modifierMs = (window.timerModifierMinutes || 0) * 60 * 1000;
+                    window.nextTripTime = new Date(parsedLastTime.getTime() + baseMs + modifierMs);
+                }
+            }
+            
+            updateCountdownClock(); window.scheduleNativeAlarms();
+        }
+        window.recalculateSchedule = recalculateSchedule;
+
+        function updateCountdownClock() {
+            const progressBar = document.getElementById('timer-progress');
+            const display = document.getElementById('countdown-display');
+            const badge = document.getElementById('timer-active-badge');
+            const container = document.getElementById('phone-container');
+            const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+
+            if (window.isSleeping) {
+                display.innerText = "Sleeping 💤";
+                display.className = "text-5xl font-black tracking-tight font-mono transition-colors";
+                progressBar.style.width = `0%`; 
+                progressBar.className = "h-full transition-all duration-1000";
+                badge.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full border transition-colors"; 
+                badge.innerText = "Sleeping";
+                document.getElementById('countdown-subtext').innerHTML = `Countdown paused while ${dName} takes a snooze`; 
+                document.getElementById('header-timer-text').innerHTML = "Sleeping 💤";
+                container.setAttribute('data-timer-state', 'sleep');
+                return;
+            }
+
+            if (!window.nextTripTime || !window.lastSuccessfulTripTime) {
+                display.innerText = "00:00:00"; 
+                progressBar.style.width = `0%`;
+                progressBar.className = "h-full transition-all duration-1000";
+                badge.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full border transition-colors";
+                badge.innerText = "Ready";
+                document.getElementById('countdown-subtext').innerHTML = `Press 'Reset Timer' to start the potty schedule`; 
+                document.getElementById('header-timer-text').innerText = "No Timer";
+                container.setAttribute('data-timer-state', 'safe');
+                return;
+            }
+
+            const now = new Date();
+            const totalWindow = window.nextTripTime.getTime() - window.lastSuccessfulTripTime.getTime();
+            const elapsed = now.getTime() - window.lastSuccessfulTripTime.getTime();
+            
+            let percentage = 0;
+            if (totalWindow > 0) {
+                percentage = (elapsed / totalWindow) * 100;
+            } else {
+                percentage = 100; // Instantly overdue if modifiers zero-out the window
+            }
+            percentage = Math.min(100, Math.max(0, percentage));
+
+            const diff = window.nextTripTime.getTime() - now.getTime();
+            const absoluteDiff = Math.abs(diff);
+            
+            // True overdue and 5-minute warning triggers based on actual time remaining, not interval percentage
+            const isOverdue = diff < 0;
+            const isSoon = diff <= (5 * 60 * 1000) && !isOverdue;
+            const isCrateWait = window.isCurrentCrateWait;
+            
+            // Apply centralized CSS state cleanly
+            let state = 'safe';
+            if (isCrateWait) {
+                state = 'crate';
+            } else {
+                if (isOverdue) state = 'now';
+                else if (isSoon) state = 'soon';
+                else state = 'safe';
+            }
+            container.setAttribute('data-timer-state', state);
+
+            progressBar.style.width = `${percentage}%`;
+            progressBar.className = isOverdue ? "h-full w-full transition-all duration-1000 animate-pulse" : "h-full transition-all duration-1000";
+            display.className = isOverdue ? "text-5xl font-black tracking-tight font-mono transition-colors animate-pulse" : "text-5xl font-black tracking-tight font-mono transition-colors";
+            badge.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full border transition-colors";
+            
+            if (isCrateWait) {
+                badge.innerText = isOverdue ? "Go Out Again!" : (isSoon ? "Crate Ending Soon" : "📦 Crate Wait");
+            } else {
+                badge.innerText = isOverdue ? "Go Now!" : (isSoon ? "Go Soon" : "Safe Zone");
+            }
+
+            const hh = String(Math.floor(absoluteDiff / (1000 * 60 * 60))).padStart(2, '0');
+            const mm = String(Math.floor((absoluteDiff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const ss = String(Math.floor((absoluteDiff % (1000 * 60)) / 1000)).padStart(2, '0');
+            display.innerText = `${isOverdue ? '-' : ''}${hh}:${mm}:${ss}`;
+
+            let overdueStr = "";
+            const hoursInt = Math.floor(absoluteDiff / (1000 * 60 * 60));
+            const minsInt = Math.floor((absoluteDiff % (1000 * 60 * 60)) / (1000 * 60));
+            if (hoursInt > 0) overdueStr = `${hoursInt}h ${minsInt}m`; else overdueStr = `${minsInt}m`;
+
+            if (isCrateWait) {
+                document.getElementById('countdown-subtext').innerHTML = isOverdue ? `<span class="timer-overdue-text">🌵 CRATE TIME UP! Try outside again!</span>` : `${dName} is resting in the crate. Try again in ${mm}m ${ss}s`;
+            } else {
+                document.getElementById('countdown-subtext').innerHTML = isOverdue ? `<span class="timer-overdue-text">⚠️ OVERDUE by ${overdueStr}! Take ${dName} outside!</span>` : `Time remaining until next scheduled potty break for ${dName}`;
+            }
+
+            document.getElementById('header-timer-text').innerHTML = isOverdue ? `<span class="text-white font-extrabold animate-pulse">${isCrateWait ? 'Go Now' : 'Go Now'} (${overdueStr})</span>` : `${hh}:${mm}:${ss}`;
+
+            const currentCycleId = window.nextTripTime.getTime();
+            if (window.activeCycleId !== currentCycleId) {
+                window.activeCycleId = currentCycleId;
+                window.hasNotifiedWarning = false;
+                window.hasNotifiedOverdue = false;
+            }
+
+            if (!isOverdue && isSoon && !window.hasNotifiedWarning) {
+                window.hasNotifiedWarning = true;
+                if (document.hidden) sendOSNotification(isCrateWait ? "📦 Crate wait ending soon" : `🐶 Heads Up!`, isCrateWait ? `${dName}'s crate time is almost up.` : `${dName} needs to go out in 5 minutes!`);
+            }
+
+            if (isOverdue && !window.hasNotifiedOverdue) {
+                window.hasNotifiedOverdue = true;
+                
+                if (document.hidden) {
+                    sendOSNotification(isCrateWait ? `📦 Crate Wait Over!` : `🚨 Time to Potty!`, isCrateWait ? `Take ${dName} outside to try again.` : `The timer expired! Take ${dName} outside right now.`);
+                }
+                
+                if (absoluteDiff <= 10000) {
+                    playChime('alert');
+                    showToast(isCrateWait ? "⏰ Crate wait period over! Try again now." : `⏰ Potty break timer expired! ${dName} is due out.`, isCrateWait ? "info" : "warning");
+                }
+            }
+        }
+        window.updateCountdownClock = updateCountdownClock;
+
+        window.requestSleepToggle = function() {
+            const isSleeping = window.isSleeping;
+            window.requestActionConfirm(
+                isSleeping ? "Unpause for awakening?" : "Pause for sleep?", 
+                toggleSleepMode
+            );
+        };
+
+        function toggleSleepMode() {
+            const newState = !window.isSleeping;
+            const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            if (!newState) {
+                const toggle = document.getElementById('quick-awakening-toggle');
+                if (toggle) toggle.checked = true;
+
+                let newResetTime = null;
+                if (window.sleepRemainingMs !== undefined && window.sleepRemainingMs !== null) {
+                    const baseMs = window.rotationIntervalMinutes * 60 * 1000;
+                    const modifierMs = (window.timerModifierMinutes || 0) * 60 * 1000;
+                    
+                    newResetTime = new Date(Date.now() + window.sleepRemainingMs - baseMs - modifierMs);
+                } else {
+                    newResetTime = new Date();
+                }
+
+                window.sleepRemainingMs = null;
+
+                window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes, false, newResetTime, null, null);
+                showToast(`${dName} woke up! Potty timer resumed.`, "success"); playChime('success');
+            } else {
+                let remainingMs = null;
+                if (window.nextTripTime) {
+                    remainingMs = Math.max(0, window.nextTripTime.getTime() - Date.now());
+                }
+                window.sleepRemainingMs = remainingMs;
+
+                window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes, true, window.forceResetTimestamp, new Date(), remainingMs);
+                showToast("Sleep mode activated. Timer paused.", "info");
+                playChime('success');
+            }
+            window.scheduleNativeAlarms();
+        }
+        window.toggleSleepMode = toggleSleepMode;
+
+        function updateSleepUI() {
+            const btn = document.getElementById('sleep-mode-btn');
+            if (!btn) return;
+            const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            if (window.isSleeping) {
+                btn.className = "bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold py-2.5 px-3 rounded-2xl border border-indigo-700 transition flex items-center justify-center gap-1.5 active:scale-95";
+                btn.innerHTML = `<span>☀️ Awaken ${dName}</span>`;
+            } else {
+                btn.className = "bg-indigo-50 hover:bg-indigo-100 text-indigo-900 text-xs font-extrabold py-2.5 px-3 rounded-2xl border border-indigo-100 transition flex items-center justify-center gap-1.5 active:scale-95";
+                btn.innerHTML = "<span>💤 Pause for Sleep</span>";
+            }
+        }
+        window.updateSleepUI = updateSleepUI;
+
+        function forceResetTimer() {
+            window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, new Date(), null, null);
+            showToast("Potty break schedule forced to restart from now!"); playChime('success');
+        }
+        window.forceResetTimer = forceResetTimer;
+
+        function applyMealDrinkOffset() {
+            const minutes = -parseInt(window.urgencyOffsetMinutes || 5, 10);
+            if (!window.nextTripTime) { showToast("Please log an initial successful trip first.", "warning"); return; }
+            const newModifier = (window.timerModifierMinutes || 0) + minutes;
+            window.saveSettingsToSync(window.rotationIntervalMinutes, newModifier);
+            showToast(`Schedule accelerated by ${Math.abs(minutes)} minutes!`); playChime('success');
+        }
+        window.applyMealDrinkOffset = applyMealDrinkOffset;
+
+        function logQuickPotty(type) {
+            const date = getTodayString();
+            const time = getCurrentTimeString(true);
+            let location = "Outside"; let notes = "";
+            const isAwakening = document.getElementById('quick-awakening-toggle').checked;
+            const awakeningTag = isAwakening ? "☀️ (On Awakening)" : "";
+
+            if (type === 'Pee') { location = "Outside Yard"; notes = awakeningTag; } 
+            else if (type === 'Poo') { location = "Outside Yard"; notes = awakeningTag; } 
+            else if (type === 'Both') { location = "Outside Yard"; notes = awakeningTag; } 
+            else if (type === 'Dry Run') { location = "Outside Yard"; notes = "Dry run - placed in crate" + (isAwakening ? " ☀️" : ""); }
+
+            const record = { date, time, type, location, notes };
+            window.savePottyRecordToSync(record);
+            document.getElementById('quick-awakening-toggle').checked = false;
+            const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            showToast(`Logged ${dName}'s ${type}!`); playChime('success');
+        }
+        window.logQuickPotty = logQuickPotty;
+
+        // --- RENDER LOGS WITH EDIT/DELETE ---
+        function renderLogsTable() {
+            const container = document.getElementById('log-cards-container');
+            const noLogs = document.getElementById('no-logs-msg');
+            container.innerHTML = '';
+
+            if (window.logs.length === 0) {
+                noLogs.classList.remove('hidden'); return;
+            } else {
+                noLogs.classList.add('hidden');
+            }
+
+            const sorted = [...window.logs].sort(window.compareLogsDescending);
+            sorted.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-3 rounded-2xl shadow-xs border border-slate-100 flex items-center justify-between gap-2.5 hover:bg-slate-50 transition duration-150";
+
+                let emoji = "❓";
+                if (item.type === 'Pee') emoji = "💦";
+                else if (item.type === 'Poo') emoji = "💩";
+                else if (item.type === 'Both') emoji = "🌟";
+                else if (item.type === 'Dry Run') emoji = "🌵";
+                else if (item.type.includes('Accident')) emoji = "🚩";
+
+                const today = getTodayString();
+                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toISOString().split('T')[0];
+                let friendlyDate = item.date;
+                if (item.date === today) friendlyDate = "Today"; else if (item.date === yesterdayStr) friendlyDate = "Yesterday";
+
+                let detailLabel = "";
+                if (item.location && item.location !== "Outside") detailLabel += item.location;
+                if (item.notes) detailLabel += detailLabel ? ` • ${item.notes}` : item.notes;
+                if (!detailLabel) detailLabel = "Outside success";
+
+                // Format the 24-hour database time string to an easy-to-read 12-hour AM/PM string
+                const displayTime = window.formatTime12Hour(item.time);
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="text-2xl">${emoji}</span>
+                        <div class="min-w-0 flex-grow">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="font-bold text-xs text-slate-800">${item.type}</span>
+                                <span class="text-[9px] text-slate-400 font-medium">${friendlyDate} @ ${displayTime}</span>
+                            </div>
+                            <p class="text-[10px] text-slate-500 truncate max-w-[240px] mt-0.5">${detailLabel}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick="openEditModal('${item.id}')" class="text-slate-300 hover:text-amber-500 p-2 rounded-full transition active:scale-95 flex-shrink-0">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                        <button onclick="requestActionConfirm('Delete Entry?', () => deleteLog('${item.id}'))" class="text-slate-300 hover:text-rose-500 p-2 rounded-full transition active:scale-95 flex-shrink-0">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        window.renderLogsTable = renderLogsTable;
+        window.deleteLog = function(id) { window.deletePottyRecordFromSync(id); };
+
+        // --- EDIT AND CUSTOM LOGS MODAL ---
+        window.openCustomLogModal = function() {
+            document.getElementById('custom-modal-title').innerText = "Add Custom Entry";
+            document.getElementById('custom-log-id').value = '';
+            document.getElementById('custom-date').value = getTodayString();
+            document.getElementById('custom-time').value = getCurrentTimeString(true);
+            document.getElementById('custom-notes').value = '';
+            document.getElementById('custom-awakening').checked = false;
+            document.getElementById('custom-log-modal').classList.remove('hidden');
+        };
+
+        window.openEditModal = function(id) {
+            const log = window.logs.find(l => l.id === id);
+            if (!log) return;
+            document.getElementById('custom-modal-title').innerText = "Edit Entry";
+            document.getElementById('custom-log-id').value = id;
+            document.getElementById('custom-date').value = log.date;
+            document.getElementById('custom-time').value = log.time.length === 5 ? log.time + ":00" : log.time;
+            document.getElementById('custom-type').value = log.type;
+            document.getElementById('custom-notes').value = log.notes || (log.location !== 'Outside' ? log.location : "");
+            document.getElementById('custom-awakening').checked = false;
+            document.getElementById('custom-log-modal').classList.remove('hidden');
+        };
+
+        window.closeCustomLogModal = function() { document.getElementById('custom-log-modal').classList.add('hidden'); };
+
+        window.saveCustomLog = function(e) {
+            e.preventDefault();
+            const idToUpdate = document.getElementById('custom-log-id').value;
+            const date = document.getElementById('custom-date').value;
+            const time = document.getElementById('custom-time').value;
+            const type = document.getElementById('custom-type').value;
+            let notes = document.getElementById('custom-notes').value;
+            const isAwakening = document.getElementById('custom-awakening').checked;
+
+            if (isAwakening) notes = notes ? `${notes} ☀️ (On Awakening)` : "☀️ (On Awakening)";
+            let formattedTime = time.split(':').length === 2 ? `${time}:00` : time;
+
+            const record = { date, time: formattedTime, type, location: "Outside", notes: notes };
+            window.savePottyRecordToSync(record, idToUpdate ? idToUpdate : null);
+            window.closeCustomLogModal();
+            document.getElementById('custom-log-form').reset();
+            showToast(idToUpdate ? "Entry updated successfully!" : "Custom outing added successfully!");
+            playChime('success');
+        };
+
+        // --- ACCIDENT MODAL ---
+        window.openAccidentModal = function() {
+            document.getElementById('accident-time').value = getCurrentTimeString(true);
+            document.getElementById('accident-log-modal').classList.remove('hidden');
+        };
+        window.closeAccidentModal = function() { document.getElementById('accident-log-modal').classList.add('hidden'); };
+
+        window.saveAccidentLog = function(e) {
+            e.preventDefault();
+            const time = document.getElementById('accident-time').value;
+            const selection = document.querySelector('input[name="acc-type"]:checked');
+            const type = selection ? selection.value : 'Accident (Pee)';
+            const location = document.getElementById('accident-location').value;
+            let notes = document.getElementById('accident-notes').value;
+            const isAwakening = document.getElementById('accident-awakening').checked;
+
+            if (isAwakening) notes = notes ? `${notes} ☀️ (On Awakening)` : "☀️ (On Awakening)";
+            let formattedTime = time.split(':').length === 2 ? `${time}:00` : time;
+
+            const record = { date: getTodayString(), time: formattedTime, type, location, notes };
+            window.savePottyRecordToSync(record);
+            window.closeAccidentModal();
+            document.getElementById('accident-form').reset();
+            showToast("Recorded accident.", "warning"); 
+            playChime('success'); 
+        };
+
+        // --- HOUSEHOLD ROOMS ---
+        window.copyHouseholdCode = function() {
+            const input = document.getElementById('household-code-input');
+            if (!input) return;
+            
+            input.focus();
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(input.value)
+                        .then(() => {
+                            showToast("Household code copied to clipboard!");
+                            playChime('success');
+                        })
+                        .catch(() => {
+                            fallbackCopySelection(input);
+                        });
+                } else {
+                    fallbackCopySelection(input);
+                }
+            } catch (e) {
+                fallbackCopySelection(input);
+            }
+        };
+
+        function fallbackCopySelection(input) {
+            try {
+                input.select();
+                input.setSelectionRange(0, 9999);
+                
+                const selection = window.getSelection();
+                if (selection && selection.rangeCount === 0) {
+                    const range = document.createRange();
+                    range.selectNodeContents(input);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+                
+                const success = document.execCommand('copy');
+                if (success) {
+                    showToast("Household code copied to clipboard!");
+                    playChime('success');
+                } else {
+                    showToast("Please copy code manually: " + input.value, "warning");
+                }
+            } catch (err) {
+                console.error("Fallback copy failed", err);
+                showToast("Please copy code manually: " + input.value, "warning");
+            }
+            
+            try {
+                window.getSelection()?.removeAllRanges();
+            } catch (e) {}
+        }
+
+        window.joinHouseholdRoom = function() {
+            const input = document.getElementById('household-join-input');
+            const targetCode = input.value.trim().toUpperCase();
+            if (!targetCode) { showToast("Please input a valid Room Code first.", "warning"); return; }
+            localStorage.setItem('mitzi_household_code', targetCode);
+            window.currentHouseholdCode = targetCode;
+            document.getElementById('household-code-input').value = targetCode;
+            input.value = '';
+            window.startHouseholdSyncListener();
+            showToast(`Switched into Sync Room: ${targetCode}`); playChime('success');
+        };
+
+        // --- ANALYTICS, PROGRESSION & PREDICTION LOGIC ---
+        window.renderCharts = function() {
+            const hourCanvas = document.getElementById('potty-hour-chart');
+            const trendCanvas = document.getElementById('potty-trend-line-chart');
+            if (!hourCanvas || !trendCanvas) return;
+
+            const now = new Date();
+            const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+            
+            const currentPeriodLogs = window.logs.filter(l => parseLogDateTime(l.date, l.time) >= sevenDaysAgo);
+
+            const total7D = currentPeriodLogs.length;
+            const accidents7D = currentPeriodLogs.filter(l => l.type && l.type.includes('Accident')).length;
+            const success7D = currentPeriodLogs.filter(l => l.type && ['Pee', 'Poo', 'Both'].includes(l.type)).length;
+
+            document.getElementById('kpi-total').innerText = total7D;
+            document.getElementById('kpi-accidents').innerText = accidents7D;
+            const rate7D = (success7D + accidents7D) > 0 ? Math.round((success7D / (success7D + accidents7D)) * 100) : (total7D > 0 ? 100 : 0);
+            document.getElementById('kpi-success').innerText = `${rate7D}%`;
+
+            calculateTrendProgression();
+            calculateAccidentFreeStreak();
+
+            const totalAllTime = window.logs.length;
+            const hourlyRuns = Array(24).fill(0);
+            const hourlyAccidents = Array(24).fill(0);
+
+            window.logs.forEach(l => {
+                if (!l.time) return;
+                const parts = l.time.split(':');
+                if (parts.length === 0) return;
+                const hour = parseInt(parts[0], 10);
+                if (isNaN(hour) || hour < 0 || hour > 23) return;
+                if (l.type && l.type.includes('Accident')) hourlyAccidents[hour]++;
+                else if (l.type && ['Pee', 'Poo', 'Both'].includes(l.type)) hourlyRuns[hour]++;
+            });
+
+            let peakPottyHour = -1; let peakPottyCount = 0;
+            let peakAccidentHour = -1; let peakAccidentCount = 0;
+
+            for (let i = 0; i < 24; i++) {
+                if (hourlyRuns[i] > peakPottyCount) { peakPottyCount = hourlyRuns[i]; peakPottyHour = i; }
+                if (hourlyAccidents[i] > peakAccidentCount) { peakAccidentCount = hourlyAccidents[i]; peakAccidentHour = i; }
+            }
+
+            let advice = "";
+            const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            if (totalAllTime < 5) {
+                advice = `Log 5 or more events to sync and calculate custom hourly danger zones for ${dName}.`;
+            } else {
+                if (peakPottyHour !== -1) {
+                    const formattedHour = peakPottyHour === 0 ? "12 AM" : peakPottyHour === 12 ? "12 PM" : peakPottyHour > 12 ? (peakPottyHour - 12) + " PM" : peakPottyHour + " AM";
+                    advice = `${dName}'s rhythm highlights high success around <b>${formattedHour}</b>. `;
+                } else advice = `Keep tracking outings on schedule! `;
+
+                if (peakAccidentCount > 0 && peakAccidentHour !== -1) {
+                    const formattedAccHour = peakAccidentHour === 0 ? "12 AM" : peakAccidentHour === 12 ? "12 PM" : peakAccidentHour > 12 ? (peakAccidentHour - 12) + " PM" : peakAccidentHour + " AM";
+                    advice += `Watch out closely near <b>${formattedAccHour}</b> as ${dName} is statistically prone to accidents then!`;
+                } else advice += `Keep taking ${dName} out on schedule!`;
+            }
+            document.getElementById('dynamic-training-advice').innerHTML = advice;
+
+            renderHourlyBarChart(hourCanvas, hourlyRuns, hourlyAccidents);
+            render7DayTrendChart(trendCanvas);
+            
+            document.getElementById('prediction-results').classList.add('hidden');
+            document.getElementById('prediction-results').classList.remove('flex');
+        };
+
+        function calculateAccidentFreeStreak() {
+            const sortedLogs = [...window.logs].sort(window.compareLogsDescending);
+            let latestAccidentDate = null;
+            
+            for (let i = 0; i < sortedLogs.length; i++) {
+                if (sortedLogs[i].type && sortedLogs[i].type.includes('Accident')) {
+                    latestAccidentDate = parseLogDateTime(sortedLogs[i].date, sortedLogs[i].time);
+                    break;
+                }
+            }
+
+            let daysStreak = 0;
+            const now = new Date();
+            if (latestAccidentDate) {
+                const pastDate = new Date(latestAccidentDate.getFullYear(), latestAccidentDate.getMonth(), latestAccidentDate.getDate());
+                const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const diffTime = Math.abs(todayDate - pastDate);
+                daysStreak = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            } else if (sortedLogs.length > 0) {
+                const firstLog = sortedLogs[sortedLogs.length - 1];
+                const firstLogDate = parseLogDateTime(firstLog.date, firstLog.time);
+                const pastDate = new Date(firstLogDate.getFullYear(), firstLogDate.getMonth(), firstLogDate.getDate());
+                const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                daysStreak = Math.floor(Math.abs(todayDate - pastDate) / (1000 * 60 * 60 * 24));
+            }
+
+            document.getElementById('streak-days').innerText = daysStreak;
+            
+            const badge = document.getElementById('streak-badge');
+            const streakEmojiEl = document.getElementById('streak-emoji');
+
+            if (daysStreak === 0) {
+                if (streakEmojiEl) streakEmojiEl.innerText = "💩";
+                badge.className = "bg-slate-100 text-slate-500 text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-slate-200 flex items-center gap-1";
+            } else {
+                if (streakEmojiEl) streakEmojiEl.innerText = "🏆";
+                if (daysStreak < 3) {
+                    badge.className = "bg-sky-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-sky-400 flex items-center gap-1";
+                } else if (daysStreak < 7) {
+                    badge.className = "bg-gradient-to-r from-emerald-400 to-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-emerald-300 flex items-center gap-1";
+                } else {
+                    badge.className = "bg-gradient-to-r from-amber-400 to-amber-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-amber-300 flex items-center gap-1";
+                }
+            }
+        }
+
+        function calculateTrendProgression() {
+            const now = new Date();
+            const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+            const fourteenDaysAgo = new Date(now.getTime() - (14 * 24 * 60 * 60 * 1000));
+
+            const currentPeriod = window.logs.filter(l => parseLogDateTime(l.date, l.time) >= sevenDaysAgo);
+            const previousPeriod = window.logs.filter(l => {
+                const d = parseLogDateTime(l.date, l.time);
+                return d >= fourteenDaysAgo && d < sevenDaysAgo;
+            });
+
+            const getStats = (arr) => {
+                const total = arr.length;
+                const acc = arr.filter(l => l.type.includes('Accident')).length;
+                const succ = arr.filter(l => ['Pee', 'Poo', 'Both'].includes(l.type)).length;
+                const rate = (succ + acc) > 0 ? (succ / (succ + acc)) * 100 : 0;
+                return { total, acc, rate };
+            };
+
+            const currStats = getStats(currentPeriod);
+            const prevStats = getStats(previousPeriod);
+
+            const applyTrendLabel = (elId, diffVal, isLowerBetter = false, formatAsPercent = false) => {
+                const el = document.getElementById(elId);
+                if (prevStats.total === 0) { el.innerHTML = `<span class="text-slate-400 font-normal">Need more data</span>`; return; }
+                
+                if (diffVal === 0) {
+                    el.innerHTML = `<span class="text-slate-500 font-normal">— No change vs last week</span>`;
+                    return;
+                }
+
+                let isGood = diffVal > 0;
+                if (isLowerBetter) isGood = diffVal < 0;
+
+                const colorClass = isGood ? 'text-emerald-600' : 'text-rose-600';
+                const arrow = diffVal > 0 ? '▲' : '▼';
+                const absDiff = Math.abs(diffVal);
+                const valStr = formatAsPercent ? `${absDiff.toFixed(0)}%` : absDiff;
+
+                el.innerHTML = `<span class="${colorClass}">${arrow} ${valStr} vs last wk</span>`;
+            };
+
+            applyTrendLabel('kpi-total-trend', currStats.total - prevStats.total, false);
+            applyTrendLabel('kpi-success-trend', currStats.rate - prevStats.rate, false, true);
+            applyTrendLabel('kpi-accidents-trend', currStats.acc - prevStats.acc, true);
+        }
+
+        function renderHourlyBarChart(canvas, hourlyRuns, hourlyAccidents) {
+            if (window.pottyChart) window.pottyChart.destroy();
+            const ampmLabels = Array.from({length: 24}, (_, i) => `${i % 12 || 12} ${i >= 12 ? 'PM' : 'AM'}`);
+            const gridColor = window.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+            const labelColor = window.isDarkMode ? '#94a3b8' : '#64748b';
+
+            window.pottyChart = new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: ampmLabels,
+                    datasets: [
+                        { label: 'Success 💦', data: hourlyRuns, backgroundColor: 'rgba(245, 158, 11, 0.75)', borderColor: 'rgb(245, 158, 11)', borderWidth: 1, borderRadius: 4 },
+                        { label: 'Accidents 🚩', data: hourlyAccidents, backgroundColor: 'rgba(239, 68, 68, 0.75)', borderColor: 'rgb(239, 68, 68)', borderWidth: 1, borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 8 }, color: labelColor }, grid: { color: gridColor } },
+                        x: { ticks: { font: { size: 7 }, maxRotation: 45, color: labelColor }, grid: { color: gridColor } }
+                    }
+                }
+            });
+        }
+
+        function render7DayTrendChart(canvas) {
+            if (window.trendChart) window.trendChart.destroy();
+            
+            const today = new Date();
+            const last7Days = [];
+            const labels = [];
+            
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(d.getDate() - i);
+                const dateStr = d.toISOString().split('T')[0];
+                last7Days.push(dateStr);
+                
+                if (i === 0) labels.push('Today');
+                else labels.push(`${d.getMonth() + 1}/${d.getDate()}`);
+            }
+
+            const successRates = last7Days.map(dateStr => {
+                const dayLogs = window.logs.filter(l => l.date === dateStr);
+                const acc = dayLogs.filter(l => l.type.includes('Accident')).length;
+                const succ = dayLogs.filter(l => ['Pee', 'Poo', 'Both'].includes(l.type)).length;
+                if (succ + acc === 0) return null;
+                return Math.round((succ / (succ + acc)) * 100);
+            });
+
+            const gridColor = window.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+            const labelColor = window.isDarkMode ? '#94a3b8' : '#64748b';
+            const lineColor = window.isDarkMode ? '#34d399' : '#10b981';
+            
+            window.trendChart = new Chart(canvas, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Success Rate',
+                        data: successRates,
+                        borderColor: lineColor,
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: lineColor,
+                        pointRadius: 3,
+                        fill: true,
+                        tension: 0.3,
+                        spanGaps: true
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100, 
+                            ticks: { 
+                                stepSize: 25, 
+                                font: { size: 8 }, 
+                                color: labelColor,
+                                callback: function(value) { return value + '%' }
+                            }, 
+                            grid: { color: gridColor } 
+                        },
+                        x: { ticks: { font: { size: 8 }, color: labelColor }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        window.predictNextPotty = function() {
+            const resultsDiv = document.getElementById('prediction-results');
+            resultsDiv.classList.remove('hidden');
+            resultsDiv.classList.add('flex');
+
+            const peeTimes = [];
+            const pooTimes = [];
+
+            const sortedLogs = [...window.logs].sort((a, b) => {
+                return parseLogDateTime(a.date, a.time).getTime() - parseLogDateTime(b.date, b.time).getTime();
+            });
+
+            sortedLogs.forEach(log => {
+                const time = parseLogDateTime(log.date, log.time).getTime();
+                if (log.type === 'Pee' || log.type === 'Both' || log.type === 'Accident (Pee)' || log.type === 'Accident (Both)') peeTimes.push(time);
+                if (log.type === 'Poo' || log.type === 'Both' || log.type === 'Accident (Poo)' || log.type === 'Accident (Both)') pooTimes.push(time);
+            });
+
+            const getMedianInterval = (times) => {
+                if (times.length < 2) return null;
+                const intervals = [];
+                for (let i = 1; i < times.length; i++) {
+                    intervals.push(times[i] - times[i-1]);
+                }
+                const validIntervals = intervals.filter(i => i < 10 * 60 * 60 * 1000 && i > 0);
+                if (validIntervals.length === 0) return null;
+                
+                validIntervals.sort((a, b) => a - b);
+                const mid = Math.floor(validIntervals.length / 2);
+                return validIntervals.length % 2 !== 0 ? validIntervals[mid] : (validIntervals[mid - 1] + validIntervals[mid]) / 2;
+            };
+
+            const formatPredictedTime = (lastTime, medianIntervalMs) => {
+                if (!lastTime || !medianIntervalMs) return "Need more data 📉";
+                
+                let nextTime = lastTime + medianIntervalMs;
+                const now = Date.now();
+                
+                let loopCount = 0;
+                while (nextTime < now && loopCount < 10) {
+                    nextTime += medianIntervalMs;
+                    loopCount++;
+                }
+                
+                if (nextTime < now) {
+                    nextTime = now + medianIntervalMs;
+                }
+
+                const d = new Date(nextTime);
+                let hours = d.getHours();
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                const minutes = String(d.getMinutes()).padStart(2, '0');
+                
+                const isToday = d.toDateString() === new Date().toDateString();
+                const isTomorrow = d.toDateString() === new Date(now + 86400000).toDateString();
+                
+                let dayStr = "";
+                if (isToday) dayStr = "Today";
+                else if (isTomorrow) dayStr = "Tomorrow";
+                else dayStr = `${d.getMonth()+1}/${d.getDate()}`;
+
+                return `${dayStr} @ ${hours}:${minutes} ${ampm}`;
+            };
+
+            const peeInterval = getMedianInterval(peeTimes);
+            const pooInterval = getMedianInterval(pooTimes);
+
+            const lastPee = peeTimes.length > 0 ? peeTimes[peeTimes.length - 1] : null;
+            const lastPoo = pooTimes.length > 0 ? pooTimes[pooTimes.length - 1] : null;
+
+            document.getElementById('pred-pee-time').innerText = formatPredictedTime(lastPee, peeInterval);
+            document.getElementById('pred-poo-time').innerText = formatPredictedTime(lastPoo, pooInterval);
+            
+            showToast("PEE-POO-LOO! The oracle has spoken! 🔮");
+            playChime('success');
+        };
+
+        // --- EXCEL DRAG AND DROP ---
+        function setupDragAndDrop() {
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('excel-file-input');
+
+            dropzone.addEventListener('click', () => fileInput.click());
+            dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('border-amber-500', 'bg-amber-100/40'); });
+            dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-amber-500', 'bg-amber-100/40'));
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault(); dropzone.classList.remove('border-amber-500', 'bg-amber-100/40');
+                if (e.dataTransfer.files.length > 0) processFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', (e) => { if (e.target.files.length > 0) processFile(e.target.files[0]); });
+        }
+
+        function processFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                    const sheet = wb.Sheets[wb.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(sheet);
+
+                    if (json.length === 0) { showToast("Your spreadsheet appears empty!", "warning"); return; }
+                    window.tempExcelData = json;
+                    const headers = (XLSX.utils.sheet_to_json(sheet, { header: 1 })[0] || []).map(h => String(h || '').trim()).filter(h => h !== '');
+                    displayColumnMapper(json, headers);
+                } catch (err) { showToast("Failed to parse file. Is it structured correctly?", "warning"); }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function displayColumnMapper(json, headers) {
+            const mapDate = document.getElementById('map-date'); const mapTime = document.getElementById('map-time');
+            const mapType = document.getElementById('map-type'); const mapLocation = document.getElementById('map-location');
+            const mapNotes = document.getElementById('map-notes');
+
+            [mapDate, mapTime, mapType, mapLocation, mapNotes].forEach(sel => {
+                sel.innerHTML = '<option value="">-- Choose Column --</option>';
+                headers.forEach(h => sel.innerHTML += `<option value="${h}">${h}</option>`);
+            });
+
+            headers.forEach(h => {
+                const l = h.toLowerCase();
+                if (l.includes('date') || l.includes('day')) mapDate.value = h;
+                if (l.includes('time') || l.includes('hour')) mapTime.value = h;
+                if (l.includes('type') || l.includes('potty') || l.includes('event')) mapType.value = h;
+                if (l.includes('location') || l.includes('loc') || l.includes('place') || l.includes('where')) mapLocation.value = h;
+                if (l.includes('note') || l.includes('comment') || l.includes('desc')) mapNotes.value = h;
+            });
+
+            document.getElementById('mapper-preview-count').innerText = `${json.length} entries loaded`;
+            document.getElementById('mapper-section').classList.remove('hidden');
+            document.getElementById('dropzone').classList.add('hidden');
+        }
+
+        window.cancelMapping = function() {
+            document.getElementById('mapper-section').classList.add('hidden');
+            document.getElementById('dropzone').classList.remove('hidden');
+            window.tempExcelData = null;
+        };
+
+        function parseTimeString(timeStr) {
+            const match = String(timeStr).trim().toLowerCase().match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?$/);
+            if (match) {
+                let hours = parseInt(match[1], 10);
+                if (match[4] === 'pm' && hours < 12) hours += 12;
+                if (match[4] === 'am' && hours === 12) hours = 0;
+                let sec = match[3] || '00';
+                return `${String(hours).padStart(2, '0')}:${match[2]}:${sec}`;
+            }
+            return String(timeStr);
+        }
+
+        function convertExcelTimeToHHMM(val) {
+            const strVal = String(val).trim();
+            // Prevents strings like "2:30 PM" from being parsed incorrectly as "2.0"
+            if (strVal.includes(':')) return parseTimeString(strVal);
+            
+            let num = parseFloat(val); 
+            if (isNaN(num)) return strVal;
+            
+            let minutes = Math.round(num * 24 * 60);
+            return `${String((Math.floor(minutes / 60)) % 24).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}:00`;
+        }
+
+        window.applyMapping = async function() {
+            if (!window.tempExcelData) return;
+            const cols = { date: document.getElementById('map-date').value, time: document.getElementById('map-time').value, type: document.getElementById('map-type').value, loc: document.getElementById('map-location').value, note: document.getElementById('map-notes').value };
+            if (!cols.date || !cols.time || !cols.type) { showToast("Date, Time, and Potty Type columns are required!", "warning"); return; }
+
+            showToast("Syncing imported spreadsheet entries...", "info");
+            let importCount = 0;
+            const recordsToSave = [];
+
+            for (let idx = 0; idx < window.tempExcelData.length; idx++) {
+                const row = window.tempExcelData[idx];
+                let cellDate = String(row[cols.date] || '').trim();
+                let cellTime = String(row[cols.time] || '').trim();
+                let cellType = String(row[cols.type] || '').trim();
+                let cellLoc = cols.loc ? String(row[cols.loc] || '').trim() : '';
+                let cellNote = cols.note ? String(row[cols.note] || '').trim() : '';
+
+                if (!isNaN(cellDate) && cellDate.length > 4) cellDate = new Date(Math.floor(parseFloat(cellDate) - 25569) * 86400 * 1000).toISOString().split('T')[0];
+                if (cellTime !== '') cellTime = convertExcelTimeToHHMM(cellTime);
+
+                let type = 'Dry Run';
+                const str = (cellType + " " + cellLoc + " " + cellNote).toLowerCase();
+                const isPee = str.includes('pee') || str.includes('piss') || str.includes('wee') || str.includes('💦');
+                const isPoo = str.includes('poo') || str.includes('crap') || str.includes('bm') || str.includes('💩');
+                const isBoth = str.includes('both') || (isPee && isPoo) || str.includes('🌟');
+                const isDryRun = str.includes('dry') || str.includes('attempt') || str.includes('🌵');
+                const isInside = str.includes('inside') || str.includes('indoor') || str.includes('house') || str.includes('accident');
+
+                if (isBoth) type = isInside ? 'Accident (Both)' : 'Both';
+                else if (isPee) type = isInside ? 'Accident (Pee)' : 'Pee';
+                else if (isPoo) type = isInside ? 'Accident (Poo)' : 'Poo';
+                else if (isDryRun) type = 'Dry Run';
+                else type = isInside ? 'Accident (Pee)' : 'Pee';
+
+                if (cellDate && cellTime) {
+                    if (cellDate.includes('/')) {
+                        const p = cellDate.split('/');
+                        if (p.length === 3) cellDate = `${p[2].length === 2 ? '20'+p[2] : p[2]}-${p[0].padStart(2, '0')}-${p[1].padStart(2, '0')}`;
+                    }
+                    let fallbackLoc = cellLoc || (isInside ? "Inside Accident" : "Outside");
+                    recordsToSave.push({ date: cellDate, time: cellTime, type, location: fallbackLoc, notes: cellNote });
+                    importCount++;
+                }
+            }
+
+            if (recordsToSave.length === 0) {
+                showToast("Could not find any readable rows.", "warning");
+                return;
+            }
+
+            if (!window.db || !window.auth || !window.auth.currentUser) {
+                const nowStr = new Date().toISOString();
+                recordsToSave.forEach((rec, index) => {
+                    const uniqueOfflineId = `offline-${Date.now()}-${index}-${Math.floor(Math.random() * 1000)}`;
+                    window.logs.push({ id: uniqueOfflineId, createdAt: nowStr, ...rec });
+                });
+                localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify(window.logs));
+                
+                // Properly clears out force-reset flags to recalculate based on imported logs
+                window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null);
+                recalculateSchedule();
+                renderLogsTable();
+                if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
+            } else {
+                try {
+                    const logsCollectionRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'logs');
+                    const chunkSize = 500;
+                    for (let i = 0; i < recordsToSave.length; i += chunkSize) {
+                        const batch = writeBatch(window.db);
+                        const chunk = recordsToSave.slice(i, i + chunkSize);
+                        chunk.forEach((rec) => {
+                            const docId = `log-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+                            const docRef = doc(logsCollectionRef, docId);
+                            batch.set(docRef, { ...rec, householdId: window.currentHouseholdCode, createdAt: new Date().toISOString() });
+                        });
+                        await batch.commit();
+                    }
+                    window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null);
+                } catch (err) {
+                    console.error("Batch commit failed: ", err);
+                    showToast("Failed to write entries to the database.", "warning");
+                    return;
+                }
+            }
+
+            showToast(`🎉 Synchronized ${importCount} entries!`);
+            playChime('success');
+            switchTab('logs');
+            cancelMapping();
+        };
+
+        window.downloadSampleTemplate = function() {
+            const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            const data = [ { "Date": "2026-06-23", "Time": "08:30:00", "Potty Event": "Pee", "Location": "Grass", "Notes": "☀️ (On Awakening)" } ];
+            const wb = XLSX.utils.book_new(); 
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), `${dName} Potties`);
+            const filename = `${dName}_Potties_Template.xlsx`;
+            XLSX.writeFile(wb, filename); 
+            showToast("Template downloaded!");
+            playChime('success');
+        };
+
+        window.exportCurrentLogs = function() {
+            const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            if (window.logs.length === 0) { showToast("No active entries to export!", "warning"); return; }
+            const formatted = window.logs.map(l => ({ "Date": l.date, "Time": l.time, "Potty Type": l.type, "Location": l.location || "Outside", "Notes": l.notes || "" }));
+            const wb = XLSX.utils.book_new(); 
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(formatted), "Potty History");
+            
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const hh = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(now.getSeconds()).padStart(2, '0');
+            const timestamp = `${yyyy}${mm}${dd}_${hh}${min}${ss}`;
+            
+            const filename = `${dName}_Potties_Template_${timestamp}.xlsx`;
+            XLSX.writeFile(wb, filename); 
+            showToast("Export completed successfully!");
+            playChime('success');
+        };
+
+        // --- INIT ROUTINE ---
+        async function initApp() {
+            window.rotationIntervalMinutes = parseInt(localStorage.getItem('mitzi_potty_interval') || "60", 10);
+            window.crateWaitMinutes = parseInt(localStorage.getItem('mitzi_crate_wait') || "15", 10);
+            window.urgencyOffsetMinutes = parseInt(localStorage.getItem('mitzi_urgency_offset') || "5", 10);
+            window.puppyName = localStorage.getItem('mitzi_puppy_name') || "Puppy";
+            
+            if (localStorage.getItem('mitzi_dark_theme') === 'true') { window.isDarkMode = true; applyDarkThemeClasses(); }
+            
+            document.getElementById('interval-select').value = window.rotationIntervalMinutes;
+            document.getElementById('crate-select').value = window.crateWaitMinutes;
+            document.getElementById('urgency-select').value = window.urgencyOffsetMinutes;
+            document.getElementById('puppy-name-input').value = window.puppyName;
+
+            if (localStorage.getItem('mitzi_notifications') === 'true') {
+                if (window.Capacitor?.Plugins?.LocalNotifications || Notification.permission === "granted") window.notificationsEnabled = true;
+            }
+            updateNotificationUI();
+
+            window.isSleeping = localStorage.getItem('mitzi_is_sleeping') === 'true';
+            const sReset = localStorage.getItem('mitzi_force_reset'); if (sReset) window.forceResetTimestamp = new Date(sReset);
+            const sStart = localStorage.getItem('mitzi_sleep_start'); if (sStart) window.sleepStartTimestamp = new Date(sStart);
+            
+            const sRemaining = localStorage.getItem('mitzi_sleep_remaining_ms');
+            window.sleepRemainingMs = sRemaining ? parseInt(sRemaining, 10) : null;
+
+            updatePuppyNameReferences(); updateUrgencyOffsetsInUI(); window.updateDryRunText(); window.updateWokeUpEmoji(); updateSleepUI();
+            
+            setupDragAndDrop();
+            setupHoldButtonEvents('Pee'); setupHoldButtonEvents('Poo'); setupHoldButtonEvents('Both'); setupHoldButtonEvents('Dry-Run');
+            
+            const workerBlob = new Blob([`
+                let intervalId;
+                self.addEventListener('message', (e) => {
+                    if (e.data === 'start') {
+                        intervalId = setInterval(() => self.postMessage('tick'), 1000);
+                    } else if (e.data === 'stop') {
+                        clearInterval(intervalId);
+                    }
+                });
+            `], { type: 'application/javascript' });
+            
+            const timerWorker = new Worker(URL.createObjectURL(workerBlob));
+            timerWorker.onmessage = () => { if (typeof updateCountdownClock === 'function') updateCountdownClock(); };
+            timerWorker.postMessage('start');
+
+            document.addEventListener("visibilitychange", () => {
+                if (!document.hidden) {
+                    recalculateSchedule();
+                    const syncDot = document.getElementById('sync-dot');
+                    if (syncDot) {
+                        syncDot.classList.add('animate-pulse', 'bg-amber-400');
+                        document.getElementById('sync-text').innerText = "Syncing...";
+                        setTimeout(() => {
+                            syncDot.classList.remove('animate-pulse', 'bg-amber-400');
+                            syncDot.classList.add('bg-emerald-500');
+                            document.getElementById('sync-text').innerText = `Synced: ${window.currentHouseholdCode}`;
+                        }, 1500);
+                    }
+                }
+            });
+
+            const manifest = { 
+                name: "Piss Patrol", 
+                short_name: "Piss Patrol", 
+                display: "standalone", 
+                background_color: "#fcf8f2", 
+                theme_color: "#f59e0b", 
+                start_url: ".", 
+                icons: [
+                    { src: "icon.png", sizes: "192x192", type: "image/png" },
+                    { src: "icon.png", sizes: "512x512", type: "image/png" }
+                ] 
+            };
+            const link = document.createElement('link'); link.rel = 'manifest'; link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/json'}));
+            document.head.appendChild(link);
+
+            await setupFirebase();
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp); else initApp();
+    </script>
+</body>
+</html>
