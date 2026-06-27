@@ -151,10 +151,10 @@
         .phone-container.dark-theme #prediction-results .text-amber-800 { color: #fcd34d !important; }
         .phone-container.dark-theme #prediction-results .text-amber-950 { color: #fef3c7 !important; }
 
-        /* Timer Dynamic Theming - Light Mode */
-        .phone-container[data-timer-state="safe"] #timer-progress { background-color: #0ea5e9; } /* Sky Blue */
-        .phone-container[data-timer-state="safe"] #countdown-display { color: #1e293b; }
-        .phone-container[data-timer-state="safe"] #timer-active-badge { background-color: #e0f2fe; color: #075985; border-color: #bae6fd; }
+        /* Timer Dynamic Theming - Light Mode (Swapped: Safe is Emerald Green, Crate Wait is Sky Blue) */
+        .phone-container[data-timer-state="safe"] #timer-progress { background-color: #10b981; } /* Emerald Green */
+        .phone-container[data-timer-state="safe"] #countdown-display { color: #059669; }
+        .phone-container[data-timer-state="safe"] #timer-active-badge { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; }
 
         .phone-container[data-timer-state="soon"] #timer-progress { background-color: #f59e0b; } /* Amber Yellow */
         .phone-container[data-timer-state="soon"] #countdown-display { color: #d97706; }
@@ -164,18 +164,18 @@
         .phone-container[data-timer-state="now"] #countdown-display { color: #e11d48; }
         .phone-container[data-timer-state="now"] #timer-active-badge { background-color: #ffe4e6; color: #9f1239; border-color: #fecdd3; }
 
-        .phone-container[data-timer-state="crate"] #timer-progress { background-color: #10b981; } /* Emerald Green */
-        .phone-container[data-timer-state="crate"] #countdown-display { color: #059669; }
-        .phone-container[data-timer-state="crate"] #timer-active-badge { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+        .phone-container[data-timer-state="crate"] #timer-progress { background-color: #0ea5e9; } /* Sky Blue */
+        .phone-container[data-timer-state="crate"] #countdown-display { color: #075985; }
+        .phone-container[data-timer-state="crate"] #timer-active-badge { background-color: #e0f2fe; color: #075985; border-color: #bae6fd; }
 
         .phone-container[data-timer-state="sleep"] #timer-progress { background-color: #6366f1; } /* Indigo */
         .phone-container[data-timer-state="sleep"] #countdown-display { color: #6366f1; }
         .phone-container[data-timer-state="sleep"] #timer-active-badge { background-color: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
 
-        /* Timer Dynamic Theming - Dark Mode (Matches KPI Boxes explicitly) */
-        .phone-container.dark-theme[data-timer-state="safe"] #timer-progress { background-color: #38bdf8; }
-        .phone-container.dark-theme[data-timer-state="safe"] #countdown-display { color: #e2e8f0; }
-        .phone-container.dark-theme[data-timer-state="safe"] #timer-active-badge { background-color: #082f49; color: #bae6fd; border-color: #0c4a6e; }
+        /* Timer Dynamic Theming - Dark Mode (Swapped: Safe matches Emerald KPI, Crate Wait matches Sky Blue) */
+        .phone-container.dark-theme[data-timer-state="safe"] #timer-progress { background-color: #10b981; }
+        .phone-container.dark-theme[data-timer-state="safe"] #countdown-display { color: #10b981; }
+        .phone-container.dark-theme[data-timer-state="safe"] #timer-active-badge { background-color: #062215; color: #d1fae5; border-color: #064e35; }
 
         .phone-container.dark-theme[data-timer-state="soon"] #timer-progress { background-color: #f59e0b; }
         .phone-container.dark-theme[data-timer-state="soon"] #countdown-display { color: #f59e0b; }
@@ -185,19 +185,19 @@
         .phone-container.dark-theme[data-timer-state="now"] #countdown-display { color: #ef4444; }
         .phone-container.dark-theme[data-timer-state="now"] #timer-active-badge { background-color: #2b0b0e; color: #fee2e2; border-color: #6b1419; }
 
-        .phone-container.dark-theme[data-timer-state="crate"] #timer-progress { background-color: #10b981; }
-        .phone-container.dark-theme[data-timer-state="crate"] #countdown-display { color: #10b981; }
-        .phone-container.dark-theme[data-timer-state="crate"] #timer-active-badge { background-color: #062215; color: #d1fae5; border-color: #064e35; }
+        .phone-container.dark-theme[data-timer-state="crate"] #timer-progress { background-color: #38bdf8; }
+        .phone-container.dark-theme[data-timer-state="crate"] #countdown-display { color: #e2e8f0; }
+        .phone-container.dark-theme[data-timer-state="crate"] #timer-active-badge { background-color: #082f49; color: #bae6fd; border-color: #0c4a6e; }
 
         .phone-container.dark-theme[data-timer-state="sleep"] #timer-progress { background-color: #818cf8; }
         .phone-container.dark-theme[data-timer-state="sleep"] #countdown-display { color: #a5b4fc; }
         .phone-container.dark-theme[data-timer-state="sleep"] #timer-active-badge { background-color: #312e81; color: #e0e7ff; border-color: #3730a3; }
         
-        /* Overdue text formatting inside subtext */
+        /* Overdue text formatting inside subtext (Swapped Crate overdue color from green to blue) */
         .phone-container[data-timer-state="now"] .timer-overdue-text { color: #e11d48; font-weight: bold; }
         .phone-container.dark-theme[data-timer-state="now"] .timer-overdue-text { color: #ef4444; }
-        .phone-container[data-timer-state="crate"] .timer-overdue-text { color: #059669; font-weight: bold; }
-        .phone-container.dark-theme[data-timer-state="crate"] .timer-overdue-text { color: #10b981; }
+        .phone-container[data-timer-state="crate"] .timer-overdue-text { color: #075985; font-weight: bold; }
+        .phone-container.dark-theme[data-timer-state="crate"] .timer-overdue-text { color: #38bdf8; }
 
         /* Dark Mode: Poo Active Badge overrides strictly synced to matching visual thresholds */
         .phone-container.dark-theme #poo-active-badge.bg-emerald-50 { background-color: #062215 !important; color: #d1fae5 !important; border-color: #064e35 !important; }
@@ -2307,7 +2307,7 @@
                 const validLogs = sortedLogs.filter(l => !['Meal', 'Drink'].includes(l.type));
                 if (validLogs.length > 0) {
                     const firstLog = validLogs[validLogs.length - 1];
-                    const firstLogDate = parseLogDateTime(firstLog.date, firstLogDate.time);
+                    const firstLogDate = parseLogDateTime(firstLog.date, firstLog.time);
                     const pastDate = new Date(firstLogDate.getFullYear(), firstLogDate.getMonth(), firstLogDate.getDate());
                     const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
                     daysStreak = Math.floor(Math.abs(todayDate - pastDate) / (1000 * 60 * 60 * 24));
