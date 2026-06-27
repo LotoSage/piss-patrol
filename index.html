@@ -76,18 +76,26 @@
             width: 0%;
             transition: width 0.5s linear;
         }
+        
+        /* Filter Pills Scrollbar Hide */
+        .filter-scroll::-webkit-scrollbar { display: none; }
+        .filter-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* Dark Theme dynamic styling rules */
         .phone-container.dark-theme { background-color: #0f172a !important; color: #e2e8f0 !important; }
         .phone-container.dark-theme .bg-white { background-color: #1e293b !important; color: #e2e8f0 !important; border-color: #334155 !important; }
         .phone-container.dark-theme .bg-slate-50 { background-color: #1e293b !important; border-color: #334155 !important; }
+        .phone-container.dark-theme .bg-sky-50, .phone-container.dark-theme .bg-amber-50 { background-color: #111827 !important; border-color: #334155 !important; }
         .phone-container.dark-theme .text-slate-800, .phone-container.dark-theme .text-slate-700 { color: #e2e8f0 !important; }
         .phone-container.dark-theme .text-slate-500, .phone-container.dark-theme .text-slate-400 { color: #94a3b8 !important; }
+        .phone-container.dark-theme .text-sky-800, .phone-container.dark-theme .text-amber-800 { color: #e2e8f0 !important; }
         .phone-container.dark-theme .border-slate-100, .phone-container.dark-theme .border-slate-200 { border-color: #334155 !important; }
         .phone-container.dark-theme select, .phone-container.dark-theme input[type="text"], .phone-container.dark-theme input[type="time"], .phone-container.dark-theme input[type="date"] { background-color: #111827 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
         .phone-container.dark-theme nav { background-color: #1e293b !important; border-top-color: #334155 !important; }
-        .phone-container.dark-theme #btn-hold-Pee, .phone-container.dark-theme #btn-hold-Poo, .phone-container.dark-theme #btn-hold-Both, .phone-container.dark-theme #btn-hold-Dry-Run, .phone-container.dark-theme #sleep-mode-btn, .phone-container.dark-theme #btn-force-reset, .phone-container.dark-theme #btn-eat-drink { background-color: #111827 !important; border: 1px solid #334155 !important; color: #f1f5f9 !important; }
-        .phone-container.dark-theme #btn-hold-Pee:hover, .phone-container.dark-theme #btn-hold-Poo:hover, .phone-container.dark-theme #btn-hold-Both:hover, .phone-container.dark-theme #btn-hold-Dry-Run:hover, .phone-container.dark-theme #sleep-mode-btn:hover, .phone-container.dark-theme #btn-force-reset:hover, .phone-container.dark-theme #btn-eat-drink:hover { background-color: #1e293b !important; }
+        
+        .phone-container.dark-theme #btn-drink, .phone-container.dark-theme #btn-eat, .phone-container.dark-theme #btn-hold-Pee, .phone-container.dark-theme #btn-hold-Poo, .phone-container.dark-theme #btn-hold-Both, .phone-container.dark-theme #btn-hold-Dry-Run, .phone-container.dark-theme #sleep-mode-btn, .phone-container.dark-theme #btn-force-reset { background-color: #111827 !important; border: 1px solid #334155 !important; color: #f1f5f9 !important; }
+        .phone-container.dark-theme #btn-drink:hover, .phone-container.dark-theme #btn-eat:hover, .phone-container.dark-theme #btn-hold-Pee:hover, .phone-container.dark-theme #btn-hold-Poo:hover, .phone-container.dark-theme #btn-hold-Both:hover, .phone-container.dark-theme #btn-hold-Dry-Run:hover, .phone-container.dark-theme #sleep-mode-btn:hover, .phone-container.dark-theme #btn-force-reset:hover { background-color: #1e293b !important; }
+        
         .phone-container.dark-theme #btn-accident { background-color: #540d0b !important; border: 1px solid #991b1b !important; color: #fee2e2 !important; }
         .phone-container.dark-theme #btn-accident:hover { background-color: #7f1d1d !important; }
         .phone-container.dark-theme #dark-theme-toggle, .phone-container.dark-theme #notification-toggle { background-color: #111827 !important; color: #f1f5f9 !important; border: 1px solid #334155 !important; }
@@ -95,10 +103,20 @@
         .phone-container.dark-theme button[onclick="openCustomLogModal()"]:hover, .phone-container.dark-theme button[onclick="downloadSampleTemplate()"]:hover { background-color: #1e293b !important; }
         .phone-container.dark-theme button[onclick="closeCustomLogModal()"], .phone-container.dark-theme button[onclick="closeAccidentModal()"], .phone-container.dark-theme button[onclick="closeQuickHoldNoteModal()"], .phone-container.dark-theme button[onclick="closeActionConfirm()"], .phone-container.dark-theme button[onclick="cancelMapping()"], .phone-container.dark-theme button[type="button"] { background-color: #111827 !important; border: 1px solid #334155 !important; color: #f1f5f9 !important; }
         
-        /* Premium Restore Defaults Dark Mode Styling Override */
-        .phone-container.dark-theme #btn-restore-defaults { background-color: #380c0d !important; border: 1px solid #7f1d1d !important; color: #fecaca !important; }
-        .phone-container.dark-theme #btn-restore-defaults:hover { background-color: #531114 !important; }
-        
+        /* Log Filter Pills Dark Theme */
+        .phone-container.dark-theme .filter-pill { background-color: #1e293b !important; color: #94a3b8 !important; border-color: #334155 !important; }
+        .phone-container.dark-theme .filter-pill:hover { background-color: #334155 !important; }
+        .phone-container.dark-theme .filter-pill.active { background-color: #d97706 !important; color: #ffffff !important; border-color: #d97706 !important; }
+
+        /* Premium Dark Mode KPI Palette Alignment */
+        .phone-container.dark-theme #btn-restore-defaults,
+        .phone-container.dark-theme #btn-delete-all { background-color: #380c0d !important; border: 1px solid #7f1d1d !important; color: #fecaca !important; }
+        .phone-container.dark-theme #btn-restore-defaults:hover,
+        .phone-container.dark-theme #btn-delete-all:hover { background-color: #531114 !important; }
+
+        .phone-container.dark-theme #btn-clear-all { background-color: #2b0b0e !important; border: 1px solid #6b1419 !important; color: #ef4444 !important; }
+        .phone-container.dark-theme #btn-clear-all:hover { background-color: #4a0f16 !important; }
+
         .phone-container.dark-theme #mapper-section { background-color: #1e293b !important; border-color: #334155 !important; color: #f1f5f9 !important; }
         .phone-container.dark-theme #mapper-section label { color: #94a3b8 !important; }
         .phone-container.dark-theme #mapper-section select { background-color: #0f172a !important; color: #e2e8f0 !important; border-color: #334155 !important; }
@@ -115,6 +133,13 @@
         .phone-container.dark-theme #kpi-card-accidents { background-color: #2b0b0e !important; border-color: #6b1419 !important; }
         .phone-container.dark-theme #kpi-card-accidents .text-rose-800 { color: #ef4444 !important; }
         .phone-container.dark-theme #kpi-card-accidents .text-rose-950 { color: #fee2e2 !important; }
+
+        /* Dynamic Streak Badges (Mapped to KPI boxes) */
+        .phone-container.dark-theme #streak-badge { background-image: none !important; }
+        .phone-container.dark-theme #streak-badge.bg-slate-100 { background-color: #1e293b !important; color: #94a3b8 !important; border-color: #334155 !important; }
+        .phone-container.dark-theme #streak-badge.bg-sky-500 { background-color: #082f49 !important; color: #38bdf8 !important; border-color: #0c4a6e !important; }
+        .phone-container.dark-theme #streak-badge.from-emerald-400 { background-color: #062215 !important; color: #10b981 !important; border-color: #064e35 !important; }
+        .phone-container.dark-theme #streak-badge.from-amber-400 { background-color: #241808 !important; color: #f59e0b !important; border-color: #4c2f06 !important; }
 
         /* Prediction UI Dark Mode overrides */
         .phone-container.dark-theme #btn-predict { background-color: #3b0764 !important; border-color: #581c87 !important; color: #e9d5ff !important; }
@@ -174,6 +199,11 @@
         .phone-container[data-timer-state="crate"] .timer-overdue-text { color: #059669; font-weight: bold; }
         .phone-container.dark-theme[data-timer-state="crate"] .timer-overdue-text { color: #10b981; }
 
+        /* Dark Mode: Poo Active Badge overrides strictly synced to matching visual thresholds */
+        .phone-container.dark-theme #poo-active-badge.bg-emerald-50 { background-color: #062215 !important; color: #d1fae5 !important; border-color: #064e35 !important; }
+        .phone-container.dark-theme #poo-active-badge.bg-amber-50 { background-color: #241808 !important; color: #fef3c7 !important; border-color: #4c2f06 !important; }
+        .phone-container.dark-theme #poo-active-badge.bg-rose-50 { background-color: #2b0b0e !important; color: #fee2e2 !important; border-color: #6b1419 !important; }
+
         /* True Dark Theme Synced Settings indicator matching Emerald KPI card */
         .phone-container.dark-theme #settings-synced-badge {
             background-color: #062215 !important;
@@ -210,9 +240,15 @@
                         </span>
                     </div>
                 </div>
-                <div class="text-right flex flex-col items-end">
-                    <span class="text-[10px] text-amber-100 uppercase font-bold tracking-wider">Due Status</span>
-                    <span id="header-timer-text" class="text-xs font-semibold bg-amber-600/40 px-2.5 py-1 rounded-lg">Calculating...</span>
+                <div class="text-right flex flex-col items-end gap-1.5">
+                    <div class="flex items-center gap-1.5 justify-end">
+                        <span class="text-[9px] text-amber-100 uppercase font-bold tracking-wider leading-none">Pee Status</span>
+                        <span id="header-timer-text" class="text-[10px] font-bold bg-amber-600/40 px-2 py-0.5 rounded min-w-[50px] text-center leading-none shadow-sm">...</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 justify-end">
+                        <span class="text-[9px] text-amber-100 uppercase font-bold tracking-wider leading-none">Poo Status</span>
+                        <span id="header-poo-text" class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500 text-white border border-emerald-400/50 min-w-[50px] text-center leading-none shadow-sm">...</span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -225,10 +261,11 @@
                 
                 <div class="bg-white rounded-3xl p-5 shadow-sm border border-amber-100/60 relative overflow-hidden text-center">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Potty Countdown</span>
-                        <span id="timer-active-badge" class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-100">
-                            Safe Zone
-                        </span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Potty Timers</span>
+                        <div class="flex gap-1.5">
+                            <span id="timer-active-badge" class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-100">Safe Zone</span>
+                            <span id="poo-active-badge" class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-100">💩 Clear</span>
+                        </div>
                     </div>
 
                     <div class="my-3">
@@ -251,10 +288,14 @@
                         </button>
                     </div>
 
-                    <div class="w-full">
-                        <button id="btn-eat-drink" onclick="applyMealDrinkOffset()" class="w-full bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold py-3 rounded-xl border border-sky-200 transition flex flex-col items-center justify-center active:scale-95">
-                            <span class="text-sm">🥩 Just Ate or Drank 🥤</span>
-                            <span class="text-[9px] opacity-75 mt-0.5"><span class="urgency-offset-val">5</span> minutes sooner</span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button id="btn-drink" onclick="logQuickEvent('Drink')" class="bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold py-3 rounded-xl border border-sky-100 transition flex flex-col items-center justify-center active:scale-95">
+                            <span class="text-sm">🥤 Drank Water</span>
+                            <span class="text-[9px] opacity-75 mt-0.5">-<span class="drink-offset-val">10</span>m to Pee Timer</span>
+                        </button>
+                        <button id="btn-eat" onclick="logQuickEvent('Meal')" class="bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold py-3 rounded-xl border border-amber-100 transition flex flex-col items-center justify-center active:scale-95">
+                            <span class="text-sm">🥩 Ate Meal</span>
+                            <span class="text-[9px] opacity-75 mt-0.5">+<span class="meal-impact-val">35</span>% to Poo Risk</span>
                         </button>
                     </div>
                 </div>
@@ -320,9 +361,22 @@
                         <h3 class="font-bold brand-font text-slate-800 text-base">Household Potty Log</h3>
                         <p class="text-[10px] text-slate-400">Poopfolio</p>
                     </div>
-                    <button onclick="requestActionConfirm('Clear all logs?', triggerClearConfirm)" class="text-rose-600 hover:text-rose-800 text-xs font-bold bg-rose-50 hover:bg-rose-100 py-1.5 px-3 rounded-lg transition active:scale-95">
-                        <i class="fa-solid fa-trash-can"></i> Clear All
+                    <button id="btn-delete-all" onclick="requestActionConfirm('Delete all logs?', triggerClearConfirm)" class="text-rose-600 hover:text-rose-800 text-xs font-bold bg-rose-50 hover:bg-rose-100 py-1.5 px-3 rounded-lg border border-rose-100 transition active:scale-95">
+                        <i class="fa-solid fa-trash-can"></i> Delete All
                     </button>
+                </div>
+
+                <div class="flex overflow-x-auto gap-2 pb-2 filter-scroll touch-pan-x snap-x -mx-4 px-4 cursor-grab active:cursor-grabbing" id="log-filter-bar">
+                    <button data-filter="All" onclick="setFilter('All')" class="filter-pill active snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border bg-amber-500 text-white border-amber-500 transition-colors">All</button>
+                    <button data-filter="Potty" onclick="setFilter('Potty')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">🚽 Potty Only</button>
+                    <button data-filter="Intake" onclick="setFilter('Intake')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">🍴 Intake Only</button>
+                    <button data-filter="Pee" onclick="setFilter('Pee')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">💦 Pee</button>
+                    <button data-filter="Poo" onclick="setFilter('Poo')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">💩 Poo</button>
+                    <button data-filter="Both" onclick="setFilter('Both')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">🌟 Both</button>
+                    <button data-filter="Water" onclick="setFilter('Water')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">🥤 Water</button>
+                    <button data-filter="Food" onclick="setFilter('Meal')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">🥩 Meal</button>
+                    <button data-filter="Dry Run" onclick="setFilter('Dry Run')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">🌵 Dry Runs</button>
+                    <button data-filter="Accident" onclick="setFilter('Accident')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">🚩 Accidents</button>
                 </div>
 
                 <!-- Spans beautifully right to the edge, but handles internal list scrolling gracefully -->
@@ -330,9 +384,9 @@
 
                 <div id="no-logs-msg" class="hidden flex flex-col items-center justify-center py-12 px-4 text-center">
                     <span class="text-4xl mb-2">📋</span>
-                    <h4 class="font-bold text-slate-600 text-sm">No synchronized logs yet</h4>
+                    <h4 class="font-bold text-slate-600 text-sm">No matched entries</h4>
                     <p class="text-[11px] text-slate-400 max-w-xs mt-1 leading-relaxed">
-                        Track <span class="puppy-name-text">Puppy</span>'s next trip or drag "<span class="puppy-name-text">Puppy</span>_Potties_Template.xlsx" onto the Settings tab to populate the potty entries in bulk!
+                        Track <span class="puppy-name-text">Puppy</span>'s activities or adjust your filters to view more events.
                     </p>
                 </div>
             </div>
@@ -386,8 +440,8 @@
                 <!-- Prediction Module -->
                 <div class="flex flex-col gap-2 mt-1 flex-shrink-0">
                     <button id="btn-predict" onclick="predictNextPotty()" class="w-full bg-purple-50 hover:bg-purple-100 text-purple-900 text-xs font-bold py-3.5 rounded-2xl border border-purple-200 transition flex items-center justify-center gap-2 active:scale-95 shadow-sm">
-                        <span class="text-xl">🔮</span>
-                        <span class="tracking-wide uppercase">Potty Prediction 🧙‍♂️</span>
+                        <span class="text-xl">🧙‍♂️</span>
+                        <span class="tracking-wide uppercase">Potty Prediction 🔮</span>
                     </button>
 
                     <div id="prediction-results" class="hidden bg-purple-50/50 border border-purple-100 rounded-3xl p-4 flex-col gap-3 shadow-sm">
@@ -488,14 +542,27 @@
                     </div>
 
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex justify-between items-center">
-                        <span class="text-xs font-bold text-slate-500">Meal Offset:</span>
-                        <select id="urgency-select" onchange="updateUrgency(this.value)" class="bg-white border border-slate-200 rounded-lg p-1.5 text-xs font-extrabold text-amber-700 cursor-pointer">
+                        <span class="text-xs font-bold text-slate-500">Drink Offset:</span>
+                        <select id="drink-offset-select" onchange="updateDrinkOffset(this.value)" class="bg-white border border-slate-200 rounded-lg p-1.5 text-xs font-extrabold text-amber-700 cursor-pointer">
                             <option value="1">1m</option>
                             <option value="2">2m</option>
                             <option value="5">5m</option>
                             <option value="10">10m</option>
                             <option value="15">15m</option>
                             <option value="20">20m</option>
+                            <option value="30">30m</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-500">Meal Impact:</span>
+                        <select id="meal-impact-select" onchange="updateMealImpact(this.value)" class="bg-white border border-slate-200 rounded-lg p-1.5 text-xs font-extrabold text-amber-700 cursor-pointer">
+                            <option value="15">15%</option>
+                            <option value="25">25%</option>
+                            <option value="35">35%</option>
+                            <option value="50">50%</option>
+                            <option value="75">75%</option>
+                            <option value="100">100%</option>
                         </select>
                     </div>
                 </div>
@@ -626,6 +693,8 @@
                             <option value="Poo">💩 Poo (Outside Success)</option>
                             <option value="Both">🌟 Both Pee & Poo (Outside Success)</option>
                             <option value="Dry Run">🌵 Dry Run</option>
+                            <option value="Drink">🥤 Drink (Reduces Pee Timer)</option>
+                            <option value="Meal">🥩 Meal (Increases Poo Risk)</option>
                         </select>
                     </div>
                     <div>
@@ -755,9 +824,11 @@
         window.logs = [];
         window.rotationIntervalMinutes = 60; // Represents the user's "Potty Interval" config
         window.crateWaitMinutes = 15;
-        window.urgencyOffsetMinutes = 5;
+        window.drinkOffsetMinutes = 10;
+        window.mealImpactScore = 35;
         window.puppyName = "Puppy";
         window.isDarkMode = false;
+        window.currentLogFilter = 'All';
         
         // Push Notification States
         window.notificationsEnabled = false;
@@ -767,9 +838,11 @@
         window.nativeAlarmId = 12345;
         window.isCurrentCrateWait = false; 
 
-        window.timerModifierMinutes = 0; 
         window.nextTripTime = null;
         window.lastSuccessfulTripTime = null;
+        window.currentPooScore = 0;
+        window.currentPooState = 'Clear';
+
         window.pottyChart = null;
         window.trendChart = null;
         window.tempExcelData = null;
@@ -969,22 +1042,26 @@
                         if (select) select.value = window.crateWaitMinutes;
                         window.updateDryRunText();
                     }
-                    if (data.urgencyOffsetMinutes) {
-                        window.urgencyOffsetMinutes = data.urgencyOffsetMinutes;
-                        const select = document.getElementById('urgency-select');
-                        if (select) select.value = window.urgencyOffsetMinutes;
-                        updateUrgencyOffsetsInUI();
+                    if (data.drinkOffsetMinutes) {
+                        window.drinkOffsetMinutes = data.drinkOffsetMinutes;
+                        const select = document.getElementById('drink-offset-select');
+                        if (select) select.value = window.drinkOffsetMinutes;
+                        updateDrinkOffsetsInUI();
+                    }
+                    if (data.mealImpactScore) {
+                        window.mealImpactScore = data.mealImpactScore;
+                        const select = document.getElementById('meal-impact-select');
+                        if (select) select.value = window.mealImpactScore;
+                        updateMealImpactsInUI();
                     }
                     if (data.puppyName !== undefined) {
                         window.puppyName = data.puppyName;
                         const input = document.getElementById('puppy-name-input');
-                        // PREVENT JUMPING FOCUS FORCE REVERT: Only update the text field's value if it's NOT currently focused
                         if (input && document.activeElement !== input) {
                             input.value = window.puppyName;
                         }
                         updatePuppyNameReferences();
                     }
-                    if (data.timerModifierMinutes !== undefined) window.timerModifierMinutes = data.timerModifierMinutes;
                     if (data.isSleeping !== undefined) {
                         window.isSleeping = data.isSleeping;
                         updateSleepUI();
@@ -996,14 +1073,13 @@
                     if (data.sleepStartTimestamp !== undefined) window.sleepStartTimestamp = data.sleepStartTimestamp ? new Date(data.sleepStartTimestamp) : null;
                     recalculateSchedule();
                 } else {
-                    window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes, window.isSleeping, window.forceResetTimestamp, window.sleepStartTimestamp, window.sleepRemainingMs);
+                    window.saveSettingsToSync(window.rotationIntervalMinutes, window.isSleeping, window.forceResetTimestamp, window.sleepStartTimestamp, window.sleepRemainingMs);
                 }
             });
         };
 
-        window.saveSettingsToSync = async function(rotationVal, modifierVal, sleepVal = undefined, resetTimeVal = undefined, sleepStartVal = undefined, sleepRemainingMsVal = undefined) {
+        window.saveSettingsToSync = async function(rotationVal, sleepVal = undefined, resetTimeVal = undefined, sleepStartVal = undefined, sleepRemainingMsVal = undefined) {
             window.rotationIntervalMinutes = rotationVal;
-            window.timerModifierMinutes = modifierVal;
             
             // Checking against undefined allows explicit passing of 'null' to cleanly clear values
             if (sleepVal !== undefined) window.isSleeping = sleepVal;
@@ -1014,9 +1090,9 @@
             if (!window.db || !window.auth || !window.auth.currentUser) {
                 localStorage.setItem('mitzi_potty_interval', rotationVal);
                 localStorage.setItem('mitzi_crate_wait', window.crateWaitMinutes);
-                localStorage.setItem('mitzi_urgency_offset', window.urgencyOffsetMinutes);
+                localStorage.setItem('mitzi_drink_offset', window.drinkOffsetMinutes);
+                localStorage.setItem('mitzi_meal_impact', window.mealImpactScore);
                 localStorage.setItem('mitzi_puppy_name', window.puppyName);
-                localStorage.setItem('mitzi_timer_modifier', modifierVal);
                 localStorage.setItem('mitzi_is_sleeping', window.isSleeping);
                 localStorage.setItem('mitzi_force_reset', window.forceResetTimestamp ? window.forceResetTimestamp.toISOString() : '');
                 localStorage.setItem('mitzi_sleep_start', window.sleepStartTimestamp ? window.sleepStartTimestamp.toISOString() : '');
@@ -1027,8 +1103,12 @@
             try {
                 const settingsDocRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'settings', window.currentHouseholdCode);
                 await setDoc(settingsDocRef, {
-                    rotationIntervalMinutes: rotationVal, crateWaitMinutes: window.crateWaitMinutes, urgencyOffsetMinutes: window.urgencyOffsetMinutes,
-                    puppyName: window.puppyName, timerModifierMinutes: modifierVal, isSleeping: window.isSleeping,
+                    rotationIntervalMinutes: rotationVal, 
+                    crateWaitMinutes: window.crateWaitMinutes, 
+                    drinkOffsetMinutes: window.drinkOffsetMinutes,
+                    mealImpactScore: window.mealImpactScore,
+                    puppyName: window.puppyName, 
+                    isSleeping: window.isSleeping,
                     forceResetTimestamp: window.forceResetTimestamp ? window.forceResetTimestamp.toISOString() : null,
                     sleepStartTimestamp: window.sleepStartTimestamp ? window.sleepStartTimestamp.toISOString() : null,
                     sleepRemainingMs: window.sleepRemainingMs !== undefined && window.sleepRemainingMs !== null ? window.sleepRemainingMs : null,
@@ -1038,20 +1118,6 @@
         };
 
         window.savePottyRecordToSync = async function(record, idToUpdate = null) {
-            const parsedRecordTime = parseLogDateTime(record.date, record.time).getTime();
-            
-            // Check if this record is the chronologically newest record in the entire app
-            const hasNewerLog = window.logs.some(l => {
-                if (idToUpdate && l.id === idToUpdate) return false;
-                return parseLogDateTime(l.date, l.time).getTime() > parsedRecordTime;
-            });
-
-            // If we are logging or editing the most recent event, clear all manual timer overrides
-            // Null explicitly passed to gracefully clear the force reset state
-            if (!hasNewerLog) {
-                window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null);
-            }
-
             if (!window.db || !window.auth || !window.auth.currentUser) {
                 if (idToUpdate) {
                     const idx = window.logs.findIndex(l => l.id === idToUpdate);
@@ -1102,7 +1168,7 @@
         let pendingConfirmActionFn = null;
         
         window.requestActionConfirm = function(title, callbackFn) {
-            const isDanger = title.toLowerCase().includes("clear") || title.toLowerCase().includes("restore");
+            const isDanger = title.toLowerCase().includes("clear") || title.toLowerCase().includes("restore") || title.toLowerCase().includes("delete");
             const btn = document.getElementById('action-confirm-btn');
             
             document.getElementById('action-confirm-title').innerText = title;
@@ -1132,7 +1198,7 @@
         window.clearSyncRoomEntirely = async function() {
             if (!window.db || !window.auth || !window.auth.currentUser) {
                 window.logs = []; localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify([]));
-                window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null); recalculateSchedule(); renderLogsTable();
+                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null); recalculateSchedule(); renderLogsTable();
                 if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
                 showToast("Offline local memory cleared", "warning"); 
                 playChime('success');
@@ -1141,7 +1207,7 @@
 
             showToast("Wiping shared room. Please wait...", "warning");
             try {
-                window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null);
+                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null);
                 const logsToDelete = [...window.logs];
                 if (logsToDelete.length === 0) {
                     playChime('success');
@@ -1424,15 +1490,16 @@
             showToast(`Logged ${dispName}'s ${pendingQuickHoldType} with notes!`); playChime('success');
         };
 
-        window.updateInterval = function(val) { window.saveSettingsToSync(parseInt(val), window.timerModifierMinutes); };
-        window.updateCrate = function(val) { window.crateWaitMinutes = parseInt(val); window.updateDryRunText(); window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes); };
-        window.updateUrgency = function(val) { window.urgencyOffsetMinutes = parseInt(val); updateUrgencyOffsetsInUI(); window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes); };
+        window.updateInterval = function(val) { window.saveSettingsToSync(parseInt(val)); };
+        window.updateCrate = function(val) { window.crateWaitMinutes = parseInt(val); window.updateDryRunText(); window.saveSettingsToSync(window.rotationIntervalMinutes); };
+        window.updateDrinkOffset = function(val) { window.drinkOffsetMinutes = parseInt(val); updateDrinkOffsetsInUI(); window.saveSettingsToSync(window.rotationIntervalMinutes); };
+        window.updateMealImpact = function(val) { window.mealImpactScore = parseInt(val); updateMealImpactsInUI(); window.saveSettingsToSync(window.rotationIntervalMinutes); };
 
         function changePuppyName(val) {
             // Avoid active trimming and blank resets during active typing on mobile devices
             window.puppyName = val; 
             updatePuppyNameReferences();
-            window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes);
+            window.saveSettingsToSync(window.rotationIntervalMinutes);
         }
         window.changePuppyName = changePuppyName;
 
@@ -1444,25 +1511,30 @@
         }
         window.updatePuppyNameReferences = updatePuppyNameReferences;
 
-        function updateUrgencyOffsetsInUI() { document.querySelectorAll('.urgency-offset-val').forEach(el => el.innerText = window.urgencyOffsetMinutes); }
+        function updateDrinkOffsetsInUI() { document.querySelectorAll('.drink-offset-val').forEach(el => el.innerText = window.drinkOffsetMinutes); }
+        function updateMealImpactsInUI() { document.querySelectorAll('.meal-impact-val').forEach(el => el.innerText = window.mealImpactScore); }
+
         window.updateDryRunText = function() { const el = document.getElementById('dry-run-subtext'); if (el) el.innerText = `Triggers ${window.crateWaitMinutes}m Crate Wait`; };
         window.updateWokeUpEmoji = function() { const el = document.getElementById('woke-up-emoji'); if (el) el.innerText = window.isDarkMode ? "🌙" : "☀️"; };
 
         window.restoreDefaults = function() {
-            window.puppyName = "Puppy"; window.rotationIntervalMinutes = 60; window.crateWaitMinutes = 15; window.urgencyOffsetMinutes = 5;
+            window.puppyName = "Puppy"; window.rotationIntervalMinutes = 60; window.crateWaitMinutes = 15; 
+            window.drinkOffsetMinutes = 10; window.mealImpactScore = 35; window.currentLogFilter = 'All';
             window.isDarkMode = false; window.isSleeping = false; window.sleepStartTimestamp = null; window.forceResetTimestamp = null; window.sleepRemainingMs = null; window.notificationsEnabled = false;
             
             document.getElementById('puppy-name-input').value = "Puppy";
             document.getElementById('interval-select').value = "60";
             document.getElementById('crate-select').value = "15";
-            document.getElementById('urgency-select').value = "5";
+            document.getElementById('drink-offset-select').value = "10";
+            document.getElementById('meal-impact-select').value = "35";
             
             const container = document.getElementById('phone-container'); container.classList.remove('dark-theme');
             localStorage.setItem('mitzi_dark_theme', 'false'); localStorage.setItem('mitzi_notifications', 'false');
             const toggleBtn = document.getElementById('dark-theme-toggle'); if (toggleBtn) toggleBtn.innerHTML = "<span>💡 Off</span>";
             
-            updateNotificationUI(); window.saveSettingsToSync(60, 0, false, null, null, null);
-            updatePuppyNameReferences(); updateUrgencyOffsetsInUI(); window.updateDryRunText(); window.updateWokeUpEmoji(); updateSleepUI();
+            updateNotificationUI(); window.saveSettingsToSync(60, false, null, null, null);
+            window.setFilter('All');
+            updatePuppyNameReferences(); updateDrinkOffsetsInUI(); updateMealImpactsInUI(); window.updateDryRunText(); window.updateWokeUpEmoji(); updateSleepUI();
             
             if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
                 window.Capacitor.Plugins.LocalNotifications.cancel({ notifications: [{ id: 1 }, { id: 2 }] });
@@ -1529,63 +1601,103 @@
             return `${hh}:${mm}`;
         }
 
-        // --- TIMER & CALCULATIONS ---
+        // --- CORE TIMER & POO SCORE CALCULATIONS ---
         function recalculateSchedule() {
             if (window.isSleeping) {
                 window.nextTripTime = null;
                 window.scheduleNativeAlarms();
+                updateCountdownClock();
                 return;
             }
 
             const allLogs = [...window.logs].sort(window.compareLogsDescending);
             
-            // Case 1: No logs exist at all
-            if (allLogs.length === 0) {
-                if (window.forceResetTimestamp) {
-                    window.lastSuccessfulTripTime = window.forceResetTimestamp;
-                    const baseMs = window.rotationIntervalMinutes * 60 * 1000;
-                    const modifierMs = (window.timerModifierMinutes || 0) * 60 * 1000;
-                    window.nextTripTime = new Date(window.forceResetTimestamp.getTime() + baseMs + modifierMs);
-                } else {
-                    window.lastSuccessfulTripTime = null; window.nextTripTime = null;
-                    document.getElementById('header-timer-text').innerText = 'No History';
+            let latestPee = null;
+            let latestPoo = null;
+
+            // Search chronologically for the most recent foundational events for both pipelines
+            for (let l of allLogs) {
+                const t = l.type;
+                if (!latestPee && ['Pee', 'Both', 'Accident (Pee)', 'Accident (Both)', 'Dry Run'].includes(t)) {
+                    latestPee = l;
                 }
-                window.isCurrentCrateWait = false;
-                updateCountdownClock(); window.scheduleNativeAlarms(); return;
+                if (!latestPoo && ['Poo', 'Both', 'Accident (Poo)', 'Accident (Both)'].includes(t)) {
+                    latestPoo = l;
+                }
+                if (latestPee && latestPoo) break;
             }
 
-            // Case 2: We have logs. The absolute most recent log is king.
-            const latestLog = allLogs[0];
-            const parsedLastTime = parseLogDateTime(latestLog.date, latestLog.time);
+            // --- 1. PEE CALCULATIONS ---
+            let basePeeTime = null;
+            let isCrate = false;
             
-            // Check if the user manually hit "Reset Timer" AFTER this latest log occurred
-            const isForceResetNewer = window.forceResetTimestamp && window.forceResetTimestamp.getTime() > parsedLastTime.getTime();
+            if (latestPee) {
+                basePeeTime = parseLogDateTime(latestPee.date, latestPee.time);
+                isCrate = latestPee.type === 'Dry Run';
+            }
 
-            if (isForceResetNewer) {
-                // Manual timer reset takes precedence
-                window.isCurrentCrateWait = false;
-                window.lastSuccessfulTripTime = window.forceResetTimestamp;
-                const baseMs = window.rotationIntervalMinutes * 60 * 1000;
-                const modifierMs = (window.timerModifierMinutes || 0) * 60 * 1000;
-                window.nextTripTime = new Date(window.forceResetTimestamp.getTime() + baseMs + modifierMs);
-            } else {
-                // The most recent chronological log strictly dictates the schedule
-                window.lastSuccessfulTripTime = parsedLastTime;
+            // Manual timer reset takes precedence if it's newer than the latest actual Pee log
+            if (window.forceResetTimestamp) {
+                if (!basePeeTime || window.forceResetTimestamp.getTime() > basePeeTime.getTime()) {
+                    basePeeTime = window.forceResetTimestamp;
+                    isCrate = false;
+                }
+            }
+
+            if (basePeeTime) {
+                window.lastSuccessfulTripTime = basePeeTime;
+                window.isCurrentCrateWait = isCrate;
                 
-                if (latestLog.type === 'Dry Run') {
-                    window.isCurrentCrateWait = true;
-                    // Dry run uses crateWaitMinutes and ignores meal/drink modifiers
-                    window.nextTripTime = new Date(parsedLastTime.getTime() + (window.crateWaitMinutes * 60 * 1000));
+                if (isCrate) {
+                    window.nextTripTime = new Date(basePeeTime.getTime() + (window.crateWaitMinutes * 60 * 1000));
                 } else {
-                    window.isCurrentCrateWait = false;
-                    // Any other event (Pee, Poo, Both, Accidents) triggers the standard countdown rotation
+                    let drinkCount = 0;
+                    for (let l of allLogs) {
+                        if (l.type === 'Drink') {
+                            if (parseLogDateTime(l.date, l.time).getTime() > basePeeTime.getTime()) drinkCount++;
+                        }
+                    }
                     const baseMs = window.rotationIntervalMinutes * 60 * 1000;
-                    const modifierMs = (window.timerModifierMinutes || 0) * 60 * 1000;
-                    window.nextTripTime = new Date(parsedLastTime.getTime() + baseMs + modifierMs);
+                    const drinkOffsetMs = drinkCount * (window.drinkOffsetMinutes * 60 * 1000);
+                    window.nextTripTime = new Date(basePeeTime.getTime() + baseMs - drinkOffsetMs);
                 }
+            } else {
+                window.lastSuccessfulTripTime = null;
+                window.nextTripTime = null;
             }
+
+            // --- 2. POO CALCULATIONS ---
+            let pooScore = 0;
+            let pooState = 'Clear';
             
-            updateCountdownClock(); window.scheduleNativeAlarms();
+            if (latestPoo) {
+                const basePooTime = parseLogDateTime(latestPoo.date, latestPoo.time);
+                let mealCount = 0;
+                for (let l of allLogs) {
+                    if (l.type === 'Meal') {
+                        if (parseLogDateTime(l.date, l.time).getTime() > basePooTime.getTime()) mealCount++;
+                    }
+                }
+                
+                const hoursSincePoo = (Date.now() - basePooTime.getTime()) / (1000 * 60 * 60);
+                const passiveAccrual = Math.max(0, hoursSincePoo) * 10; // Passive 10 points per hour
+                
+                pooScore = Math.floor(passiveAccrual + (mealCount * window.mealImpactScore));
+            } else {
+                // If there are literally zero poo logs ever, assume moderate danger
+                pooScore = 50;
+            }
+
+            pooScore = Math.max(0, Math.min(100, pooScore));
+            if (pooScore <= 33) pooState = 'Clear';
+            else if (pooScore <= 66) pooState = 'Caution';
+            else pooState = 'Danger';
+
+            window.currentPooScore = pooScore;
+            window.currentPooState = pooState;
+
+            updateCountdownClock(); 
+            window.scheduleNativeAlarms();
         }
         window.recalculateSchedule = recalculateSchedule;
 
@@ -1595,19 +1707,53 @@
             const badge = document.getElementById('timer-active-badge');
             const container = document.getElementById('phone-container');
             const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+            
+            const headerPoo = document.getElementById('header-poo-text');
+            const pooBadge = document.getElementById('poo-active-badge');
+            const headerTimer = document.getElementById('header-timer-text');
 
+            // --- POO UI UPDATE ---
+            if (window.isSleeping) {
+                const sleepStr = "Sleep 💤";
+                headerPoo.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500 text-white min-w-[50px] text-center leading-none shadow-sm";
+                headerPoo.innerText = sleepStr;
+            } else {
+                const s = window.currentPooState;
+                if (s === 'Clear') {
+                    headerPoo.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500 text-white border border-emerald-400/50 min-w-[50px] text-center leading-none shadow-sm";
+                    headerPoo.innerText = "Clear";
+                    pooBadge.className = "bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-100";
+                    pooBadge.innerText = "💩 Clear";
+                } else if (s === 'Caution') {
+                    headerPoo.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-amber-600/40 text-white border border-amber-500/50 min-w-[50px] text-center leading-none shadow-sm";
+                    headerPoo.innerText = "Caution";
+                    pooBadge.className = "bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-100";
+                    pooBadge.innerText = "💩 Caution";
+                } else {
+                    headerPoo.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500 text-white border border-rose-400/50 min-w-[50px] text-center leading-none shadow-sm";
+                    headerPoo.innerText = "Danger";
+                    pooBadge.className = "bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-100";
+                    pooBadge.innerText = "💩 Danger";
+                }
+            }
+
+            // --- PEE TIMER UI UPDATE ---
             if (window.isSleeping) {
                 display.innerText = "Sleeping 💤";
                 display.className = "text-5xl font-black tracking-tight font-mono transition-colors";
                 progressBar.style.width = `0%`; 
                 progressBar.className = "h-full transition-all duration-1000";
                 badge.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full border transition-colors"; 
-                badge.innerText = "Sleeping";
+                badge.innerText = "💤 Sleeping";
+                pooBadge.classList.add('hidden'); // Redundant to have both sleep badges
                 document.getElementById('countdown-subtext').innerHTML = `Countdown paused while ${dName} takes a snooze`; 
-                document.getElementById('header-timer-text').innerHTML = "Sleeping 💤";
+                headerTimer.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500 text-white min-w-[50px] text-center leading-none shadow-sm";
+                headerTimer.innerText = "Sleep 💤";
                 container.setAttribute('data-timer-state', 'sleep');
                 return;
             }
+
+            pooBadge.classList.remove('hidden');
 
             if (!window.nextTripTime || !window.lastSuccessfulTripTime) {
                 display.innerText = "00:00:00"; 
@@ -1616,7 +1762,8 @@
                 badge.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full border transition-colors";
                 badge.innerText = "Ready";
                 document.getElementById('countdown-subtext').innerHTML = `Press 'Reset Timer' to start the potty schedule`; 
-                document.getElementById('header-timer-text').innerText = "No Timer";
+                headerTimer.className = "text-[10px] font-bold bg-amber-600/40 text-white px-2 py-0.5 rounded min-w-[50px] text-center leading-none";
+                headerTimer.innerText = "No Timer";
                 container.setAttribute('data-timer-state', 'safe');
                 return;
             }
@@ -1655,12 +1802,12 @@
             progressBar.style.width = `${percentage}%`;
             progressBar.className = isOverdue ? "h-full w-full transition-all duration-1000 animate-pulse" : "h-full transition-all duration-1000";
             display.className = isOverdue ? "text-5xl font-black tracking-tight font-mono transition-colors animate-pulse" : "text-5xl font-black tracking-tight font-mono transition-colors";
-            badge.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full border transition-colors";
+            badge.className = `text-[10px] font-bold px-2.5 py-0.5 rounded-full border transition-colors ${isOverdue ? 'animate-pulse' : ''}`;
             
             if (isCrateWait) {
-                badge.innerText = isOverdue ? "Go Out Again!" : (isSoon ? "Crate Ending Soon" : "📦 Crate Wait");
+                badge.innerText = isOverdue ? "💦 Go Out Again!" : (isSoon ? "📦 Ending Soon" : "📦 Crate Wait");
             } else {
-                badge.innerText = isOverdue ? "Go Now!" : (isSoon ? "Go Soon" : "Safe Zone");
+                badge.innerText = isOverdue ? "💦 Go Now!" : (isSoon ? "💦 Go Soon" : "💦 Safe Zone");
             }
 
             const hh = String(Math.floor(absoluteDiff / (1000 * 60 * 60))).padStart(2, '0');
@@ -1679,7 +1826,13 @@
                 document.getElementById('countdown-subtext').innerHTML = isOverdue ? `<span class="timer-overdue-text">⚠️ OVERDUE by ${overdueStr}! Take ${dName} outside!</span>` : `Time remaining until next scheduled potty break for ${dName}`;
             }
 
-            document.getElementById('header-timer-text').innerHTML = isOverdue ? `<span class="text-white font-extrabold animate-pulse">${isCrateWait ? 'Go Now' : 'Go Now'} (${overdueStr})</span>` : `${hh}:${mm}:${ss}`;
+            if (isOverdue) {
+                headerTimer.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500 text-white border border-rose-400/50 min-w-[50px] text-center leading-none shadow-sm animate-pulse";
+                headerTimer.innerText = `Go Now (${overdueStr})`;
+            } else {
+                headerTimer.className = "text-[10px] font-bold bg-amber-600/40 text-white px-2 py-0.5 rounded min-w-[50px] text-center leading-none";
+                headerTimer.innerText = `${hh}:${mm}:${ss}`;
+            }
 
             const currentCycleId = window.nextTripTime.getTime();
             if (window.activeCycleId !== currentCycleId) {
@@ -1725,17 +1878,17 @@
 
                 let newResetTime = null;
                 if (window.sleepRemainingMs !== undefined && window.sleepRemainingMs !== null) {
+                    // Because drinks recalculate perfectly based on historical events, we simply 
+                    // adjust the hard 'force reset' target timestamp forward exactly by the sleep time
                     const baseMs = window.rotationIntervalMinutes * 60 * 1000;
-                    const modifierMs = (window.timerModifierMinutes || 0) * 60 * 1000;
-                    
-                    newResetTime = new Date(Date.now() + window.sleepRemainingMs - baseMs - modifierMs);
+                    newResetTime = new Date(Date.now() + window.sleepRemainingMs - baseMs);
                 } else {
                     newResetTime = new Date();
                 }
 
                 window.sleepRemainingMs = null;
 
-                window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes, false, newResetTime, null, null);
+                window.saveSettingsToSync(window.rotationIntervalMinutes, false, newResetTime, null, null);
                 showToast(`${dName} woke up! Potty timer resumed.`, "success"); playChime('success');
             } else {
                 let remainingMs = null;
@@ -1744,7 +1897,7 @@
                 }
                 window.sleepRemainingMs = remainingMs;
 
-                window.saveSettingsToSync(window.rotationIntervalMinutes, window.timerModifierMinutes, true, window.forceResetTimestamp, new Date(), remainingMs);
+                window.saveSettingsToSync(window.rotationIntervalMinutes, true, window.forceResetTimestamp, new Date(), remainingMs);
                 showToast("Sleep mode activated. Timer paused.", "info");
                 playChime('success');
             }
@@ -1767,19 +1920,24 @@
         window.updateSleepUI = updateSleepUI;
 
         function forceResetTimer() {
-            window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, new Date(), null, null);
-            showToast("Potty break schedule forced to restart from now!"); playChime('success');
+            window.saveSettingsToSync(window.rotationIntervalMinutes, false, new Date(), null, null);
+            showToast("Pee break schedule forced to restart from now!"); playChime('success');
         }
         window.forceResetTimer = forceResetTimer;
 
-        function applyMealDrinkOffset() {
-            const minutes = -parseInt(window.urgencyOffsetMinutes || 5, 10);
-            if (!window.nextTripTime) { showToast("Please log an initial successful trip first.", "warning"); return; }
-            const newModifier = (window.timerModifierMinutes || 0) + minutes;
-            window.saveSettingsToSync(window.rotationIntervalMinutes, newModifier);
-            showToast(`Schedule accelerated by ${Math.abs(minutes)} minutes!`); playChime('success');
-        }
-        window.applyMealDrinkOffset = applyMealDrinkOffset;
+        window.logQuickEvent = function(type) {
+            const impactText = type === 'Drink' ? `-${window.drinkOffsetMinutes}m to Pee Timer` : `+${window.mealImpactScore}% to Poo Risk`;
+            const record = { 
+                date: getTodayString(), 
+                time: getCurrentTimeString(true), 
+                type: type, 
+                location: "N/A", 
+                notes: impactText
+            };
+            window.savePottyRecordToSync(record);
+            const displayType = type === 'Drink' ? 'Water Intake' : (type === 'Meal' ? 'Food Intake' : type);
+            showToast(`Logged ${displayType}! Recalculating timers.`); playChime('success');
+        };
 
         function logQuickPotty(type) {
             const date = getTodayString();
@@ -1801,6 +1959,21 @@
         }
         window.logQuickPotty = logQuickPotty;
 
+        // --- FILTER PILL SELECTION LOGIC ---
+        window.setFilter = function(filterName) {
+            window.currentLogFilter = filterName;
+            
+            document.querySelectorAll('.filter-pill').forEach(el => {
+                if(el.dataset.filter === filterName) {
+                    el.className = "filter-pill active snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border bg-amber-500 text-white border-amber-500 transition-colors";
+                } else {
+                    el.className = "filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50";
+                }
+            });
+            
+            renderLogsTable();
+        };
+
         // --- RENDER LOGS WITH EDIT/DELETE ---
         function renderLogsTable() {
             const container = document.getElementById('log-cards-container');
@@ -1814,16 +1987,36 @@
             }
 
             const sorted = [...window.logs].sort(window.compareLogsDescending);
-            sorted.forEach(item => {
+            
+            let filteredLogs = sorted.filter(item => {
+                if (window.currentLogFilter === 'All') return true;
+                if (window.currentLogFilter === 'Potty') return ['Pee', 'Poo', 'Both', 'Accident (Pee)', 'Accident (Poo)', 'Accident (Both)', 'Dry Run'].includes(item.type);
+                if (window.currentLogFilter === 'Intake') return ['Drink', 'Meal'].includes(item.type);
+                if (window.currentLogFilter === 'Accident') return item.type && item.type.includes('Accident');
+                if (window.currentLogFilter === 'Water') return item.type === 'Drink';
+                if (window.currentLogFilter === 'Food') return item.type === 'Meal';
+                return item.type === window.currentLogFilter; // Maps directly for 'Pee', 'Poo', 'Both', 'Dry Run'
+            });
+
+            if (filteredLogs.length === 0) {
+                noLogs.classList.remove('hidden'); return;
+            } else {
+                noLogs.classList.add('hidden');
+            }
+
+            filteredLogs.forEach(item => {
                 const card = document.createElement('div');
                 card.className = "bg-white p-3 rounded-2xl shadow-xs border border-slate-100 flex items-center justify-between gap-2.5 hover:bg-slate-50 transition duration-150";
 
                 let emoji = "❓";
+                let displayType = item.type;
                 if (item.type === 'Pee') emoji = "💦";
                 else if (item.type === 'Poo') emoji = "💩";
                 else if (item.type === 'Both') emoji = "🌟";
                 else if (item.type === 'Dry Run') emoji = "🌵";
-                else if (item.type.includes('Accident')) emoji = "🚩";
+                else if (item.type === 'Drink') { emoji = "🥤"; displayType = "Drank Water"; }
+                else if (item.type === 'Meal') { emoji = "🥩"; displayType = "Ate Food"; }
+                else if (item.type && item.type.includes('Accident')) emoji = "🚩";
 
                 const today = getTodayString();
                 const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
@@ -1832,9 +2025,15 @@
                 if (item.date === today) friendlyDate = "Today"; else if (item.date === yesterdayStr) friendlyDate = "Yesterday";
 
                 let detailLabel = "";
-                if (item.location && item.location !== "Outside") detailLabel += item.location;
-                if (item.notes) detailLabel += detailLabel ? ` • ${item.notes}` : item.notes;
-                if (!detailLabel) detailLabel = "Outside success";
+                if (item.location && item.location !== "Outside" && item.location !== "N/A") detailLabel += item.location;
+                
+                const validNotes = item.notes && item.notes !== "Quick log" ? item.notes : "";
+                if (validNotes) detailLabel += detailLabel ? ` • ${validNotes}` : validNotes;
+                
+                if (!detailLabel) {
+                    if (['Drink', 'Meal'].includes(item.type)) detailLabel = "Tracked Intake";
+                    else detailLabel = "Outside success";
+                }
 
                 // Format the 24-hour database time string to an easy-to-read 12-hour AM/PM string
                 const displayTime = window.formatTime12Hour(item.time);
@@ -1844,7 +2043,7 @@
                         <span class="text-2xl">${emoji}</span>
                         <div class="min-w-0 flex-grow">
                             <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="font-bold text-xs text-slate-800">${item.type}</span>
+                                <span class="font-bold text-xs text-slate-800">${displayType}</span>
                                 <span class="text-[9px] text-slate-400 font-medium">${friendlyDate} @ ${displayTime}</span>
                             </div>
                             <p class="text-[10px] text-slate-500 truncate max-w-[240px] mt-0.5">${detailLabel}</p>
@@ -1884,7 +2083,7 @@
             document.getElementById('custom-date').value = log.date;
             document.getElementById('custom-time').value = log.time.length === 5 ? log.time + ":00" : log.time;
             document.getElementById('custom-type').value = log.type;
-            document.getElementById('custom-notes').value = log.notes || (log.location !== 'Outside' ? log.location : "");
+            document.getElementById('custom-notes').value = log.notes || (log.location !== 'Outside' && log.location !== 'N/A' ? log.location : "");
             document.getElementById('custom-awakening').checked = false;
             document.getElementById('custom-log-modal').classList.remove('hidden');
         };
@@ -1900,10 +2099,19 @@
             let notes = document.getElementById('custom-notes').value;
             const isAwakening = document.getElementById('custom-awakening').checked;
 
-            if (isAwakening) notes = notes ? `${notes} ☀️ (On Awakening)` : "☀️ (On Awakening)";
-            let formattedTime = time.split(':').length === 2 ? `${time}:00` : time;
+            if (isAwakening) {
+                notes = notes ? `${notes} ☀️ (On Awakening)` : "☀️ (On Awakening)";
+            } else if (!notes.trim() && ['Drink', 'Meal'].includes(type)) {
+                // Pre-fill metrics dynamically based on current tracking values
+                notes = type === 'Drink' ? `-${window.drinkOffsetMinutes}m to Pee Timer` : `+${window.mealImpactScore}% to Poo Risk`;
+            }
 
-            const record = { date, time: formattedTime, type, location: "Outside", notes: notes };
+            let formattedTime = time.split(':').length === 2 ? `${time}:00` : time;
+            
+            let loc = "Outside";
+            if (['Drink', 'Meal'].includes(type)) loc = "N/A";
+
+            const record = { date, time: formattedTime, type, location: loc, notes: notes };
             window.savePottyRecordToSync(record, idToUpdate ? idToUpdate : null);
             window.closeCustomLogModal();
             document.getElementById('custom-log-form').reset();
@@ -2015,7 +2223,8 @@
             
             const currentPeriodLogs = window.logs.filter(l => parseLogDateTime(l.date, l.time) >= sevenDaysAgo);
 
-            const total7D = currentPeriodLogs.length;
+            // Filter out Meal/Drink from core "trip" metrics
+            const total7D = currentPeriodLogs.filter(l => !['Meal', 'Drink'].includes(l.type)).length;
             const accidents7D = currentPeriodLogs.filter(l => l.type && l.type.includes('Accident')).length;
             const success7D = currentPeriodLogs.filter(l => l.type && ['Pee', 'Poo', 'Both'].includes(l.type)).length;
 
@@ -2027,12 +2236,14 @@
             calculateTrendProgression();
             calculateAccidentFreeStreak();
 
-            const totalAllTime = window.logs.length;
             const hourlyRuns = Array(24).fill(0);
             const hourlyAccidents = Array(24).fill(0);
+            
+            let totalActualTrips = 0;
 
             window.logs.forEach(l => {
-                if (!l.time) return;
+                if (!l.time || ['Meal', 'Drink'].includes(l.type)) return;
+                totalActualTrips++;
                 const parts = l.time.split(':');
                 if (parts.length === 0) return;
                 const hour = parseInt(parts[0], 10);
@@ -2051,7 +2262,7 @@
 
             let advice = "";
             const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
-            if (totalAllTime < 5) {
+            if (totalActualTrips < 5) {
                 advice = `Log 5 or more events to sync and calculate custom hourly danger zones for ${dName}.`;
             } else {
                 if (peakPottyHour !== -1) {
@@ -2092,11 +2303,15 @@
                 const diffTime = Math.abs(todayDate - pastDate);
                 daysStreak = Math.floor(diffTime / (1000 * 60 * 60 * 24));
             } else if (sortedLogs.length > 0) {
-                const firstLog = sortedLogs[sortedLogs.length - 1];
-                const firstLogDate = parseLogDateTime(firstLog.date, firstLog.time);
-                const pastDate = new Date(firstLogDate.getFullYear(), firstLogDate.getMonth(), firstLogDate.getDate());
-                const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                daysStreak = Math.floor(Math.abs(todayDate - pastDate) / (1000 * 60 * 60 * 24));
+                // Find first log that isn't a meal/drink
+                const validLogs = sortedLogs.filter(l => !['Meal', 'Drink'].includes(l.type));
+                if (validLogs.length > 0) {
+                    const firstLog = validLogs[validLogs.length - 1];
+                    const firstLogDate = parseLogDateTime(firstLog.date, firstLogDate.time);
+                    const pastDate = new Date(firstLogDate.getFullYear(), firstLogDate.getMonth(), firstLogDate.getDate());
+                    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    daysStreak = Math.floor(Math.abs(todayDate - pastDate) / (1000 * 60 * 60 * 24));
+                }
             }
 
             document.getElementById('streak-days').innerText = daysStreak;
@@ -2124,10 +2339,11 @@
             const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
             const fourteenDaysAgo = new Date(now.getTime() - (14 * 24 * 60 * 60 * 1000));
 
-            const currentPeriod = window.logs.filter(l => parseLogDateTime(l.date, l.time) >= sevenDaysAgo);
+            // Exclude non-potty events from counts
+            const currentPeriod = window.logs.filter(l => !['Meal', 'Drink'].includes(l.type) && parseLogDateTime(l.date, l.time) >= sevenDaysAgo);
             const previousPeriod = window.logs.filter(l => {
                 const d = parseLogDateTime(l.date, l.time);
-                return d >= fourteenDaysAgo && d < sevenDaysAgo;
+                return !['Meal', 'Drink'].includes(l.type) && d >= fourteenDaysAgo && d < sevenDaysAgo;
             });
 
             const getStats = (arr) => {
@@ -2146,7 +2362,7 @@
                 if (prevStats.total === 0) { el.innerHTML = `<span class="text-slate-400 font-normal">Need more data</span>`; return; }
                 
                 if (diffVal === 0) {
-                    el.innerHTML = `<span class="text-slate-500 font-normal">— No change vs last week</span>`;
+                    el.innerHTML = `<span class="text-slate-500 font-normal">- No change vs last week</span>`;
                     return;
                 }
 
@@ -2332,9 +2548,40 @@
             document.getElementById('pred-pee-time').innerText = formatPredictedTime(lastPee, peeInterval);
             document.getElementById('pred-poo-time').innerText = formatPredictedTime(lastPoo, pooInterval);
             
-            showToast("PEE-POO-LOO! The oracle has spoken! 🔮");
+            showToast("POO-PEE-LOO! The Potty Prophet has spoken! 🔮");
             playChime('success');
         };
+
+        // --- PC FILTER SCROLLING ---
+        function setupFilterScroll() {
+            const slider = document.querySelector('.filter-scroll');
+            if(!slider) return;
+            
+            let isDown = false; let startX; let scrollLeft;
+            
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true; 
+                startX = e.pageX - slider.offsetLeft; 
+                scrollLeft = slider.scrollLeft;
+            });
+            slider.addEventListener('mouseleave', () => { isDown = false; });
+            slider.addEventListener('mouseup', () => { isDown = false; });
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2; // scroll speed multiplier
+                slider.scrollLeft = scrollLeft - walk;
+            });
+            
+            // Allow vertical scroll wheels to scroll the bar horizontally
+            slider.addEventListener('wheel', (e) => {
+                if (e.deltaY !== 0) {
+                    e.preventDefault();
+                    slider.scrollLeft += e.deltaY;
+                }
+            }, { passive: false });
+        }
 
         // --- EXCEL DRAG AND DROP ---
         function setupDragAndDrop() {
@@ -2412,7 +2659,6 @@
 
         function convertExcelTimeToHHMM(val) {
             const strVal = String(val).trim();
-            // Prevents strings like "2:30 PM" from being parsed incorrectly as "2.0"
             if (strVal.includes(':')) return parseTimeString(strVal);
             
             let num = parseFloat(val); 
@@ -2449,11 +2695,15 @@
                 const isBoth = str.includes('both') || (isPee && isPoo) || str.includes('🌟');
                 const isDryRun = str.includes('dry') || str.includes('attempt') || str.includes('🌵');
                 const isInside = str.includes('inside') || str.includes('indoor') || str.includes('house') || str.includes('accident');
+                const isDrink = str.includes('drink') || str.includes('water') || str.includes('🥤');
+                const isMeal = str.includes('meal') || str.includes('eat') || str.includes('food') || str.includes('🥩');
 
                 if (isBoth) type = isInside ? 'Accident (Both)' : 'Both';
                 else if (isPee) type = isInside ? 'Accident (Pee)' : 'Pee';
                 else if (isPoo) type = isInside ? 'Accident (Poo)' : 'Poo';
                 else if (isDryRun) type = 'Dry Run';
+                else if (isDrink) type = 'Drink';
+                else if (isMeal) type = 'Meal';
                 else type = isInside ? 'Accident (Pee)' : 'Pee';
 
                 if (cellDate && cellTime) {
@@ -2461,7 +2711,7 @@
                         const p = cellDate.split('/');
                         if (p.length === 3) cellDate = `${p[2].length === 2 ? '20'+p[2] : p[2]}-${p[0].padStart(2, '0')}-${p[1].padStart(2, '0')}`;
                     }
-                    let fallbackLoc = cellLoc || (isInside ? "Inside Accident" : "Outside");
+                    let fallbackLoc = cellLoc || (isInside ? "Inside Accident" : (['Drink', 'Meal'].includes(type) ? "N/A" : "Outside"));
                     recordsToSave.push({ date: cellDate, time: cellTime, type, location: fallbackLoc, notes: cellNote });
                     importCount++;
                 }
@@ -2480,8 +2730,7 @@
                 });
                 localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify(window.logs));
                 
-                // Properly clears out force-reset flags to recalculate based on imported logs
-                window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null);
+                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null);
                 recalculateSchedule();
                 renderLogsTable();
                 if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
@@ -2499,7 +2748,7 @@
                         });
                         await batch.commit();
                     }
-                    window.saveSettingsToSync(window.rotationIntervalMinutes, 0, false, null, null, null);
+                    window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null);
                 } catch (err) {
                     console.error("Batch commit failed: ", err);
                     showToast("Failed to write entries to the database.", "warning");
@@ -2550,14 +2799,16 @@
         async function initApp() {
             window.rotationIntervalMinutes = parseInt(localStorage.getItem('mitzi_potty_interval') || "60", 10);
             window.crateWaitMinutes = parseInt(localStorage.getItem('mitzi_crate_wait') || "15", 10);
-            window.urgencyOffsetMinutes = parseInt(localStorage.getItem('mitzi_urgency_offset') || "5", 10);
+            window.drinkOffsetMinutes = parseInt(localStorage.getItem('mitzi_drink_offset') || "10", 10);
+            window.mealImpactScore = parseInt(localStorage.getItem('mitzi_meal_impact') || "35", 10);
             window.puppyName = localStorage.getItem('mitzi_puppy_name') || "Puppy";
             
             if (localStorage.getItem('mitzi_dark_theme') === 'true') { window.isDarkMode = true; applyDarkThemeClasses(); }
             
             document.getElementById('interval-select').value = window.rotationIntervalMinutes;
             document.getElementById('crate-select').value = window.crateWaitMinutes;
-            document.getElementById('urgency-select').value = window.urgencyOffsetMinutes;
+            document.getElementById('drink-offset-select').value = window.drinkOffsetMinutes;
+            document.getElementById('meal-impact-select').value = window.mealImpactScore;
             document.getElementById('puppy-name-input').value = window.puppyName;
 
             if (localStorage.getItem('mitzi_notifications') === 'true') {
@@ -2572,8 +2823,9 @@
             const sRemaining = localStorage.getItem('mitzi_sleep_remaining_ms');
             window.sleepRemainingMs = sRemaining ? parseInt(sRemaining, 10) : null;
 
-            updatePuppyNameReferences(); updateUrgencyOffsetsInUI(); window.updateDryRunText(); window.updateWokeUpEmoji(); updateSleepUI();
+            updatePuppyNameReferences(); updateDrinkOffsetsInUI(); updateMealImpactsInUI(); window.updateDryRunText(); window.updateWokeUpEmoji(); updateSleepUI();
             
+            setupFilterScroll();
             setupDragAndDrop();
             setupHoldButtonEvents('Pee'); setupHoldButtonEvents('Poo'); setupHoldButtonEvents('Both'); setupHoldButtonEvents('Dry-Run');
             
