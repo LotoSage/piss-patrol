@@ -165,7 +165,7 @@
         .phone-container[data-timer-state="now"] #timer-active-badge { background-color: #ffe4e6; color: #9f1239; border-color: #fecdd3; }
 
         .phone-container[data-timer-state="crate"] #timer-progress { background-color: #0ea5e9; } /* Sky Blue */
-        .phone-container[data-timer-state="crate"] #countdown-display { color: #075985; }
+        .phone-container[data-timer-state="crate"] #countdown-display { color: #0ea5e9; } /* Swapped to match the Sky Blue bar */
         .phone-container[data-timer-state="crate"] #timer-active-badge { background-color: #e0f2fe; color: #075985; border-color: #bae6fd; }
 
         .phone-container[data-timer-state="sleep"] #timer-progress { background-color: #6366f1; } /* Indigo */
@@ -186,7 +186,7 @@
         .phone-container.dark-theme[data-timer-state="now"] #timer-active-badge { background-color: #2b0b0e; color: #fee2e2; border-color: #6b1419; }
 
         .phone-container.dark-theme[data-timer-state="crate"] #timer-progress { background-color: #38bdf8; }
-        .phone-container.dark-theme[data-timer-state="crate"] #countdown-display { color: #e2e8f0; }
+        .phone-container.dark-theme[data-timer-state="crate"] #countdown-display { color: #38bdf8; } /* Swapped to match the light sky blue bar */
         .phone-container.dark-theme[data-timer-state="crate"] #timer-active-badge { background-color: #082f49; color: #bae6fd; border-color: #0c4a6e; }
 
         .phone-container.dark-theme[data-timer-state="sleep"] #timer-progress { background-color: #818cf8; }
@@ -253,7 +253,7 @@
             </div>
         </header>
 
-        <!-- Dynamic Screen Content Sections: Scrolls internally behind the pinned navigation footer bar -->
+        <!-- Dynamic Screen Content Sections -->
         <main class="flex-grow overflow-y-auto px-4 py-5 pb-24 flex flex-col gap-5">
             
             <!-- SCREEN 1: SCHEDULE / COUNTER (DEFAULT SCREEN) -->
@@ -283,8 +283,9 @@
                         <button id="sleep-mode-btn" onclick="requestSleepToggle()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-900 text-xs font-extrabold py-2.5 px-3 rounded-2xl border border-indigo-100 transition flex items-center justify-center gap-1.5 active:scale-95">
                             <span>💤 Pause for Sleep</span>
                         </button>
-                        <button id="btn-force-reset" onclick="requestActionConfirm('Reset timer?', forceResetTimer)" class="bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-extrabold py-2.5 px-3 rounded-2xl border border-slate-200 transition flex items-center justify-center gap-1.5 active:scale-95">
+                        <button id="btn-force-reset" class="touch-action-none relative overflow-hidden bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-extrabold py-2.5 px-3 rounded-2xl border border-slate-200 transition flex items-center justify-center gap-1.5 active:scale-95 select-none cursor-pointer">
                             <span>🔄 Reset Timer</span>
+                            <div class="hold-indicator" id="hold-indicator-Reset"></div>
                         </button>
                     </div>
 
@@ -379,7 +380,6 @@
                     <button data-filter="Accident" onclick="setFilter('Accident')" class="filter-pill snap-start whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50">🚩 Accidents</button>
                 </div>
 
-                <!-- Spans beautifully right to the edge, but handles internal list scrolling gracefully -->
                 <div class="flex flex-col gap-2.5 pr-1 flex-grow overflow-y-auto" id="log-cards-container"></div>
 
                 <div id="no-logs-msg" class="hidden flex flex-col items-center justify-center py-12 px-4 text-center">
@@ -391,7 +391,7 @@
                 </div>
             </div>
 
-            <!-- SCREEN 3: ANALYTICS & RECURRING OUTINGS -->
+            <!-- SCREEN 3: DAILY PATTERNS & STATS -->
             <div id="screen-analytics" class="screen-view hidden flex flex-col gap-4">
                 <div class="flex justify-between items-end">
                     <div>
@@ -473,7 +473,7 @@
                 </div>
             </div>
 
-            <!-- SCREEN 4: APP CONFIG & FILES (CONSOLIDATED SETTINGS VIEW) -->
+            <!-- SCREEN 4: APP CONFIG & FILES -->
             <div id="screen-settings" class="screen-view hidden flex flex-col gap-4">
                 <div>
                     <h3 class="font-bold brand-font text-slate-800 text-base">App & Sync Settings</h3>
@@ -648,7 +648,7 @@
 
         </main>
 
-        <!-- Pinned App Navigation: Styled securely absolute to sit stably on top of screen content -->
+        <!-- Pinned App Navigation -->
         <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-3 py-2 flex justify-around items-center z-40 rounded-t-3xl shadow-2xl flex-shrink-0">
             <button onclick="switchTab('schedule')" id="nav-schedule" class="nav-btn flex flex-col items-center gap-1 text-slate-400 font-semibold transition py-1 flex-1 nav-active">
                 <i class="fa-solid fa-clock-rotate-left text-lg"></i>
@@ -695,6 +695,9 @@
                             <option value="Dry Run">🌵 Dry Run</option>
                             <option value="Drink">🥤 Drink (Reduces Pee Timer)</option>
                             <option value="Meal">🥩 Meal (Increases Poo Risk)</option>
+                            <option value="Accident (Pee)">🚩 Accident (Pee - Inside)</option>
+                            <option value="Accident (Poo)">🚩 Accident (Poo - Inside)</option>
+                            <option value="Accident (Both)">🚩 Accident (Both - Inside)</option>
                         </select>
                     </div>
                     <div>
@@ -855,6 +858,7 @@
         
         window.isSleeping = false;
         window.forceResetTimestamp = null;
+        window.forcePooResetTimestamp = null;
         window.sleepStartTimestamp = null;
         window.sleepRemainingMs = null; // State to track active countdown freeze frames
 
@@ -882,21 +886,25 @@
         };
 
         function parseLogDateTime(dateStr, timeStr) {
-            let fullTime = timeStr;
-            if (timeStr.split(':').length === 2) {
-                fullTime = `${timeStr}:00`;
+            let fullTime = timeStr || "00:00:00";
+            if (fullTime.split(':').length === 2) {
+                fullTime = `${fullTime}:00`;
             }
-            const d = new Date(`${dateStr}T${fullTime}`);
-            if (isNaN(d.getTime())) {
-                try {
-                    const parts = dateStr.split('-');
-                    const timeParts = fullTime.split(':');
-                    return new Date(parts[0], parts[1] - 1, parts[2], timeParts[0], timeParts[1], timeParts[2]);
-                } catch(e) {
-                    return new Date();
-                }
+            try {
+                // Manually parse strings in local timezone context to prevent browser-specific offset conversions
+                const dateParts = dateStr.split('-');
+                const timeParts = fullTime.split(':');
+                return new Date(
+                    parseInt(dateParts[0], 10),
+                    parseInt(dateParts[1], 10) - 1,
+                    parseInt(dateParts[2], 10),
+                    parseInt(timeParts[0], 10),
+                    parseInt(timeParts[1], 10),
+                    parseInt(timeParts[2], 10)
+                );
+            } catch(e) {
+                return new Date();
             }
-            return d;
         }
 
         window.compareLogsDescending = function(a, b) {
@@ -1070,20 +1078,22 @@
                         window.sleepRemainingMs = data.sleepRemainingMs;
                     }
                     if (data.forceResetTimestamp !== undefined) window.forceResetTimestamp = data.forceResetTimestamp ? new Date(data.forceResetTimestamp) : null;
+                    if (data.forcePooResetTimestamp !== undefined) window.forcePooResetTimestamp = data.forcePooResetTimestamp ? new Date(data.forcePooResetTimestamp) : null;
                     if (data.sleepStartTimestamp !== undefined) window.sleepStartTimestamp = data.sleepStartTimestamp ? new Date(data.sleepStartTimestamp) : null;
                     recalculateSchedule();
                 } else {
-                    window.saveSettingsToSync(window.rotationIntervalMinutes, window.isSleeping, window.forceResetTimestamp, window.sleepStartTimestamp, window.sleepRemainingMs);
+                    window.saveSettingsToSync(window.rotationIntervalMinutes, window.isSleeping, window.forceResetTimestamp, window.sleepStartTimestamp, window.sleepRemainingMs, window.forcePooResetTimestamp);
                 }
             });
         };
 
-        window.saveSettingsToSync = async function(rotationVal, sleepVal = undefined, resetTimeVal = undefined, sleepStartVal = undefined, sleepRemainingMsVal = undefined) {
+        window.saveSettingsToSync = async function(rotationVal, sleepVal = undefined, resetTimeVal = undefined, sleepStartVal = undefined, sleepRemainingMsVal = undefined, resetPooTimeVal = undefined) {
             window.rotationIntervalMinutes = rotationVal;
             
             // Checking against undefined allows explicit passing of 'null' to cleanly clear values
             if (sleepVal !== undefined) window.isSleeping = sleepVal;
             if (resetTimeVal !== undefined) window.forceResetTimestamp = resetTimeVal;
+            if (resetPooTimeVal !== undefined) window.forcePooResetTimestamp = resetPooTimeVal;
             if (sleepStartVal !== undefined) window.sleepStartTimestamp = sleepStartVal;
             if (sleepRemainingMsVal !== undefined) window.sleepRemainingMs = sleepRemainingMsVal;
 
@@ -1095,6 +1105,7 @@
                 localStorage.setItem('mitzi_puppy_name', window.puppyName);
                 localStorage.setItem('mitzi_is_sleeping', window.isSleeping);
                 localStorage.setItem('mitzi_force_reset', window.forceResetTimestamp ? window.forceResetTimestamp.toISOString() : '');
+                localStorage.setItem('mitzi_force_poo_reset', window.forcePooResetTimestamp ? window.forcePooResetTimestamp.toISOString() : '');
                 localStorage.setItem('mitzi_sleep_start', window.sleepStartTimestamp ? window.sleepStartTimestamp.toISOString() : '');
                 localStorage.setItem('mitzi_sleep_remaining_ms', window.sleepRemainingMs !== null && window.sleepRemainingMs !== undefined ? String(window.sleepRemainingMs) : '');
                 recalculateSchedule();
@@ -1110,6 +1121,7 @@
                     puppyName: window.puppyName, 
                     isSleeping: window.isSleeping,
                     forceResetTimestamp: window.forceResetTimestamp ? window.forceResetTimestamp.toISOString() : null,
+                    forcePooResetTimestamp: window.forcePooResetTimestamp ? window.forcePooResetTimestamp.toISOString() : null,
                     sleepStartTimestamp: window.sleepStartTimestamp ? window.sleepStartTimestamp.toISOString() : null,
                     sleepRemainingMs: window.sleepRemainingMs !== undefined && window.sleepRemainingMs !== null ? window.sleepRemainingMs : null,
                     updatedAt: new Date().toISOString()
@@ -1198,7 +1210,7 @@
         window.clearSyncRoomEntirely = async function() {
             if (!window.db || !window.auth || !window.auth.currentUser) {
                 window.logs = []; localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify([]));
-                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null); recalculateSchedule(); renderLogsTable();
+                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null, null); recalculateSchedule(); renderLogsTable();
                 if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
                 showToast("Offline local memory cleared", "warning"); 
                 playChime('success');
@@ -1207,7 +1219,7 @@
 
             showToast("Wiping shared room. Please wait...", "warning");
             try {
-                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null);
+                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null, null);
                 const logsToDelete = [...window.logs];
                 if (logsToDelete.length === 0) {
                     playChime('success');
@@ -1465,6 +1477,77 @@
             el.addEventListener('mouseleave', () => cancelHold());
         }
 
+        function setupResetButtonEvents() {
+            const el = document.getElementById('btn-force-reset');
+            const indicator = document.getElementById('hold-indicator-Reset');
+            if (!el) return;
+
+            let timerId = null;
+            let isLongPress = false;
+            let startX = 0, startY = 0;
+            let hasMoved = false;
+            let isTouch = false;
+            const dragThreshold = 10;
+
+            const startHold = (clientX, clientY, touchMode) => {
+                startX = clientX; startY = clientY;
+                hasMoved = false; isLongPress = false; isTouch = touchMode;
+                indicator.style.transition = 'width 0.5s linear'; indicator.style.width = '100%';
+                if (timerId) clearTimeout(timerId);
+
+                timerId = setTimeout(() => {
+                    if (!hasMoved) {
+                        isLongPress = true; indicator.style.transition = 'none'; indicator.style.width = '0%';
+                        window.requestActionConfirm(
+                            "Reset Poo risk meter to Clear?", 
+                            forceResetPooTimer
+                        );
+                    }
+                }, HOLD_DURATION);
+            };
+
+            const moveHold = (clientX, clientY) => {
+                if (!timerId) return;
+                const dist = Math.sqrt(Math.pow(clientX - startX, 2) + Math.pow(clientY - startY, 2));
+                if (dist > dragThreshold) {
+                    hasMoved = true; clearTimeout(timerId); timerId = null;
+                    indicator.style.transition = 'none'; indicator.style.width = '0%';
+                }
+            };
+
+            const endHold = (touchMode, e) => {
+                if (touchMode && !isTouch) return;
+                if (!touchMode && isTouch) return;
+
+                const hadTimer = !!timerId;
+                clearTimeout(timerId); timerId = null;
+                indicator.style.transition = 'none'; indicator.style.width = '0%';
+
+                if (!hasMoved) {
+                    if (hadTimer && !isLongPress) {
+                        window.requestActionConfirm('Reset pee timer?', forceResetTimer);
+                        if (touchMode && e && e.cancelable) e.preventDefault();
+                    }
+                }
+                isLongPress = false; hasMoved = false;
+            };
+
+            const cancelHold = () => {
+                clearTimeout(timerId); timerId = null;
+                indicator.style.transition = 'none'; indicator.style.width = '0%';
+                isLongPress = false; hasMoved = false;
+            };
+
+            el.addEventListener('touchstart', (e) => { if (e.touches.length > 1) return; startHold(e.touches[0].clientX, e.touches[0].clientY, true); }, { passive: true });
+            el.addEventListener('touchmove', (e) => { if (e.touches.length === 0) return; moveHold(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+            el.addEventListener('touchend', (e) => { endHold(true, e); setTimeout(() => { isTouch = false; }, 600); }, { passive: false });
+            el.addEventListener('touchcancel', () => cancelHold(), { passive: true });
+            el.addEventListener('mousedown', (e) => { if (isTouch) return; if (e.button !== 0) return; startHold(e.clientX, e.clientY, false); });
+            el.addEventListener('mousemove', (e) => { if (isTouch) return; moveHold(e.clientX, e.clientY); });
+            el.addEventListener('mouseup', (e) => { if (isTouch) return; endHold(false, e); });
+            el.addEventListener('mouseleave', () => cancelHold());
+        }
+
         let pendingQuickHoldType = '';
         function openQuickHoldNoteModal(type) {
             pendingQuickHoldType = type;
@@ -1480,7 +1563,9 @@
             const customText = document.getElementById('hold-modal-input-text').value.trim();
             const isAwakening = document.getElementById('quick-awakening-toggle').checked;
             let notes = customText;
+            
             if (isAwakening) notes = notes ? `${notes} ☀️ (On Awakening)` : "☀️ (On Awakening)";
+            else if (!notes && pendingQuickHoldType === 'Dry Run') notes = "Dry run - placed in crate";
 
             const record = { date: getTodayString(), time: getCurrentTimeString(), type: pendingQuickHoldType, location: pendingQuickHoldType === 'Dry Run' ? 'Outside Yard' : 'Outside', notes };
             window.savePottyRecordToSync(record);
@@ -1496,7 +1581,6 @@
         window.updateMealImpact = function(val) { window.mealImpactScore = parseInt(val); updateMealImpactsInUI(); window.saveSettingsToSync(window.rotationIntervalMinutes); };
 
         function changePuppyName(val) {
-            // Avoid active trimming and blank resets during active typing on mobile devices
             window.puppyName = val; 
             updatePuppyNameReferences();
             window.saveSettingsToSync(window.rotationIntervalMinutes);
@@ -1520,7 +1604,7 @@
         window.restoreDefaults = function() {
             window.puppyName = "Puppy"; window.rotationIntervalMinutes = 60; window.crateWaitMinutes = 15; 
             window.drinkOffsetMinutes = 10; window.mealImpactScore = 35; window.currentLogFilter = 'All';
-            window.isDarkMode = false; window.isSleeping = false; window.sleepStartTimestamp = null; window.forceResetTimestamp = null; window.sleepRemainingMs = null; window.notificationsEnabled = false;
+            window.isDarkMode = false; window.isSleeping = false; window.sleepStartTimestamp = null; window.forceResetTimestamp = null; window.forcePooResetTimestamp = null; window.sleepRemainingMs = null; window.notificationsEnabled = false;
             
             document.getElementById('puppy-name-input').value = "Puppy";
             document.getElementById('interval-select').value = "60";
@@ -1532,7 +1616,7 @@
             localStorage.setItem('mitzi_dark_theme', 'false'); localStorage.setItem('mitzi_notifications', 'false');
             const toggleBtn = document.getElementById('dark-theme-toggle'); if (toggleBtn) toggleBtn.innerHTML = "<span>💡 Off</span>";
             
-            updateNotificationUI(); window.saveSettingsToSync(60, false, null, null, null);
+            updateNotificationUI(); window.saveSettingsToSync(60, false, null, null, null, null);
             window.setFilter('All');
             updatePuppyNameReferences(); updateDrinkOffsetsInUI(); updateMealImpactsInUI(); window.updateDryRunText(); window.updateWokeUpEmoji(); updateSleepUI();
             
@@ -1669,9 +1753,20 @@
             // --- 2. POO CALCULATIONS ---
             let pooScore = 0;
             let pooState = 'Clear';
+            let basePooTime = null;
             
             if (latestPoo) {
-                const basePooTime = parseLogDateTime(latestPoo.date, latestPoo.time);
+                basePooTime = parseLogDateTime(latestPoo.date, latestPoo.time);
+            }
+
+            // Manual poop reset timestamp
+            if (window.forcePooResetTimestamp) {
+                if (!basePooTime || window.forcePooResetTimestamp.getTime() > basePooTime.getTime()) {
+                    basePooTime = window.forcePooResetTimestamp;
+                }
+            }
+
+            if (basePooTime) {
                 let mealCount = 0;
                 for (let l of allLogs) {
                     if (l.type === 'Meal') {
@@ -1888,7 +1983,7 @@
 
                 window.sleepRemainingMs = null;
 
-                window.saveSettingsToSync(window.rotationIntervalMinutes, false, newResetTime, null, null);
+                window.saveSettingsToSync(window.rotationIntervalMinutes, false, newResetTime, null, null, window.forcePooResetTimestamp);
                 showToast(`${dName} woke up! Potty timer resumed.`, "success"); playChime('success');
             } else {
                 let remainingMs = null;
@@ -1897,7 +1992,7 @@
                 }
                 window.sleepRemainingMs = remainingMs;
 
-                window.saveSettingsToSync(window.rotationIntervalMinutes, true, window.forceResetTimestamp, new Date(), remainingMs);
+                window.saveSettingsToSync(window.rotationIntervalMinutes, true, window.forceResetTimestamp, new Date(), remainingMs, window.forcePooResetTimestamp);
                 showToast("Sleep mode activated. Timer paused.", "info");
                 playChime('success');
             }
@@ -1920,10 +2015,16 @@
         window.updateSleepUI = updateSleepUI;
 
         function forceResetTimer() {
-            window.saveSettingsToSync(window.rotationIntervalMinutes, false, new Date(), null, null);
+            window.saveSettingsToSync(window.rotationIntervalMinutes, false, new Date(), null, null, window.forcePooResetTimestamp);
             showToast("Pee break schedule forced to restart from now!"); playChime('success');
         }
         window.forceResetTimer = forceResetTimer;
+
+        function forceResetPooTimer() {
+            window.saveSettingsToSync(window.rotationIntervalMinutes, window.isSleeping, window.forceResetTimestamp, window.sleepStartTimestamp, window.sleepRemainingMs, new Date());
+            showToast("Poo risk meter reset to Clear starting from now!"); playChime('success');
+        }
+        window.forceResetPooTimer = forceResetPooTimer;
 
         window.logQuickEvent = function(type) {
             const impactText = type === 'Drink' ? `-${window.drinkOffsetMinutes}m to Pee Timer` : `+${window.mealImpactScore}% to Poo Risk`;
@@ -2025,13 +2126,15 @@
                 if (item.date === today) friendlyDate = "Today"; else if (item.date === yesterdayStr) friendlyDate = "Yesterday";
 
                 let detailLabel = "";
-                if (item.location && item.location !== "Outside" && item.location !== "N/A") detailLabel += item.location;
+                if (item.location && item.location !== "Outside" && item.location !== "N/A" && item.location !== "Outside Yard") detailLabel += item.location;
                 
                 const validNotes = item.notes && item.notes !== "Quick log" ? item.notes : "";
                 if (validNotes) detailLabel += detailLabel ? ` • ${validNotes}` : validNotes;
                 
                 if (!detailLabel) {
                     if (['Drink', 'Meal'].includes(item.type)) detailLabel = "Tracked Intake";
+                    else if (item.type === 'Dry Run') detailLabel = "Dry run - placed in crate";
+                    else if (item.type && item.type.includes('Accident')) detailLabel = "Inside Accident";
                     else detailLabel = "Outside success";
                 }
 
@@ -2083,7 +2186,7 @@
             document.getElementById('custom-date').value = log.date;
             document.getElementById('custom-time').value = log.time.length === 5 ? log.time + ":00" : log.time;
             document.getElementById('custom-type').value = log.type;
-            document.getElementById('custom-notes').value = log.notes || (log.location !== 'Outside' && log.location !== 'N/A' ? log.location : "");
+            document.getElementById('custom-notes').value = log.notes || "";
             document.getElementById('custom-awakening').checked = false;
             document.getElementById('custom-log-modal').classList.remove('hidden');
         };
@@ -2096,20 +2199,31 @@
             const date = document.getElementById('custom-date').value;
             const time = document.getElementById('custom-time').value;
             const type = document.getElementById('custom-type').value;
-            let notes = document.getElementById('custom-notes').value;
+            let notes = document.getElementById('custom-notes').value.trim();
             const isAwakening = document.getElementById('custom-awakening').checked;
 
             if (isAwakening) {
                 notes = notes ? `${notes} ☀️ (On Awakening)` : "☀️ (On Awakening)";
-            } else if (!notes.trim() && ['Drink', 'Meal'].includes(type)) {
+            } else if (!notes && ['Drink', 'Meal'].includes(type)) {
                 // Pre-fill metrics dynamically based on current tracking values
                 notes = type === 'Drink' ? `-${window.drinkOffsetMinutes}m to Pee Timer` : `+${window.mealImpactScore}% to Poo Risk`;
+            } else if (!notes && type === 'Dry Run') {
+                notes = "Dry run - placed in crate";
             }
 
             let formattedTime = time.split(':').length === 2 ? `${time}:00` : time;
             
-            let loc = "Outside";
-            if (['Drink', 'Meal'].includes(type)) loc = "N/A";
+            let loc = "Outside Yard";
+            if (['Drink', 'Meal'].includes(type)) {
+                loc = "N/A";
+            } else if (type.includes('Accident')) {
+                if (idToUpdate) {
+                    const existingLog = window.logs.find(l => l.id === idToUpdate);
+                    loc = existingLog && existingLog.location && existingLog.location !== 'Outside' && existingLog.location !== 'Outside Yard' ? existingLog.location : "Inside Accident";
+                } else {
+                    loc = "Inside Accident";
+                }
+            }
 
             const record = { date, time: formattedTime, type, location: loc, notes: notes };
             window.savePottyRecordToSync(record, idToUpdate ? idToUpdate : null);
@@ -2711,7 +2825,7 @@
                         const p = cellDate.split('/');
                         if (p.length === 3) cellDate = `${p[2].length === 2 ? '20'+p[2] : p[2]}-${p[0].padStart(2, '0')}-${p[1].padStart(2, '0')}`;
                     }
-                    let fallbackLoc = cellLoc || (isInside ? "Inside Accident" : (['Drink', 'Meal'].includes(type) ? "N/A" : "Outside"));
+                    let fallbackLoc = cellLoc || (isInside ? "Inside Accident" : (['Drink', 'Meal'].includes(type) ? "N/A" : "Outside Yard"));
                     recordsToSave.push({ date: cellDate, time: cellTime, type, location: fallbackLoc, notes: cellNote });
                     importCount++;
                 }
@@ -2730,7 +2844,7 @@
                 });
                 localStorage.setItem('mitzi_potty_logs_offline', JSON.stringify(window.logs));
                 
-                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null);
+                window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null, null);
                 recalculateSchedule();
                 renderLogsTable();
                 if (!document.getElementById('screen-analytics').classList.contains('hidden')) renderCharts();
@@ -2748,7 +2862,7 @@
                         });
                         await batch.commit();
                     }
-                    window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null);
+                    window.saveSettingsToSync(window.rotationIntervalMinutes, false, null, null, null, null);
                 } catch (err) {
                     console.error("Batch commit failed: ", err);
                     showToast("Failed to write entries to the database.", "warning");
@@ -2776,7 +2890,7 @@
         window.exportCurrentLogs = function() {
             const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
             if (window.logs.length === 0) { showToast("No active entries to export!", "warning"); return; }
-            const formatted = window.logs.map(l => ({ "Date": l.date, "Time": l.time, "Potty Type": l.type, "Location": l.location || "Outside", "Notes": l.notes || "" }));
+            const formatted = window.logs.map(l => ({ "Date": l.date, "Time": l.time, "Potty Type": l.type, "Location": l.location || "Outside Yard", "Notes": l.notes || "" }));
             const wb = XLSX.utils.book_new(); 
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(formatted), "Potty History");
             
@@ -2818,6 +2932,7 @@
 
             window.isSleeping = localStorage.getItem('mitzi_is_sleeping') === 'true';
             const sReset = localStorage.getItem('mitzi_force_reset'); if (sReset) window.forceResetTimestamp = new Date(sReset);
+            const sPooReset = localStorage.getItem('mitzi_force_poo_reset'); if (sPooReset) window.forcePooResetTimestamp = new Date(sPooReset);
             const sStart = localStorage.getItem('mitzi_sleep_start'); if (sStart) window.sleepStartTimestamp = new Date(sStart);
             
             const sRemaining = localStorage.getItem('mitzi_sleep_remaining_ms');
@@ -2828,6 +2943,7 @@
             setupFilterScroll();
             setupDragAndDrop();
             setupHoldButtonEvents('Pee'); setupHoldButtonEvents('Poo'); setupHoldButtonEvents('Both'); setupHoldButtonEvents('Dry-Run');
+            setupResetButtonEvents();
             
             const workerBlob = new Blob([`
                 let intervalId;
