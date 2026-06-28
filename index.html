@@ -10,10 +10,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Piss Patrol">
-    <link rel="apple-touch-icon" href="icon.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="icon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="icon.png">
+    <link class="apple-touch-icon" rel="apple-touch-icon" href="icon.png">
+    <link class="apple-touch-icon" rel="apple-touch-icon" sizes="152x152" href="icon.png">
+    <link class="apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="icon.png">
+    <link class="apple-touch-icon" rel="apple-touch-icon" sizes="167x167" href="icon.png">
     
     <!-- Standard Favicon -->
     <link rel="icon" type="image/png" href="icon.png">
@@ -360,7 +360,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h3 class="font-bold brand-font text-slate-800 text-base">Household Potty Log</h3>
-                        <p class="text-[10px] text-slate-400">Poopfolio</p>
+                        <p class="text-[10px] text-slate-400">Poopfolio • Tap logs to expand descriptions</p>
                     </div>
                     <button id="btn-delete-all" onclick="requestActionConfirm('Delete all logs?', triggerClearConfirm)" class="text-rose-600 hover:text-rose-800 text-xs font-bold bg-rose-50 hover:bg-rose-100 py-1.5 px-3 rounded-lg border border-rose-100 transition active:scale-95">
                         <i class="fa-solid fa-trash-can"></i> Delete All
@@ -1129,7 +1129,67 @@
             } catch (err) { console.error("Error writing settings: ", err); }
         };
 
+        // Automatic awakening handling when a potty takes place during sleep
+        function processSleepAwakeningIfNeeded(record) {
+            if (!window.isSleeping) return;
+            
+            const pottyTypes = ['Pee', 'Poo', 'Both', 'Accident (Pee)', 'Accident (Poo)', 'Accident (Both)', 'Dry Run'];
+            if (!pottyTypes.includes(record.type)) return;
+
+            const eventTime = parseLogDateTime(record.date, record.time);
+            const now = new Date();
+            
+            let isDuringSleep = false;
+            if (window.sleepStartTimestamp) {
+                const sleepStart = new Date(window.sleepStartTimestamp);
+                // Grace period buffer of 60 seconds
+                isDuringSleep = (eventTime.getTime() >= sleepStart.getTime() && eventTime.getTime() <= (now.getTime() + 60000));
+            } else {
+                isDuringSleep = true; 
+            }
+
+            if (isDuringSleep) {
+                window.isSleeping = false;
+                
+                const awakeTag = "☀️ (On Awakening)";
+                if (!record.notes) {
+                    record.notes = awakeTag;
+                } else if (!record.notes.includes("Awakening")) {
+                    record.notes = `${record.notes} ${awakeTag}`;
+                }
+
+                const isPeeRelated = ['Pee', 'Both', 'Accident (Pee)', 'Accident (Both)', 'Dry Run'].includes(record.type);
+                const isPooRelated = ['Poo', 'Both', 'Accident (Poo)', 'Accident (Both)'].includes(record.type);
+
+                if (isPeeRelated) {
+                    window.forceResetTimestamp = eventTime;
+                }
+                if (isPooRelated) {
+                    window.forcePooResetTimestamp = eventTime;
+                }
+
+                window.sleepRemainingMs = null;
+                window.sleepStartTimestamp = null;
+
+                window.saveSettingsToSync(
+                    window.rotationIntervalMinutes, 
+                    false, 
+                    window.forceResetTimestamp, 
+                    null, 
+                    null, 
+                    window.forcePooResetTimestamp
+                );
+
+                const dName = window.puppyName ? window.puppyName.trim() : "Puppy";
+                showToast(`${dName} woke up! Potty timer resumed.`, "success");
+            }
+        }
+
         window.savePottyRecordToSync = async function(record, idToUpdate = null) {
+            if (!idToUpdate) {
+                processSleepAwakeningIfNeeded(record);
+            }
+
             if (!window.db || !window.auth || !window.auth.currentUser) {
                 if (idToUpdate) {
                     const idx = window.logs.findIndex(l => l.id === idToUpdate);
@@ -1834,16 +1894,23 @@
 
             // --- PEE TIMER UI UPDATE ---
             if (window.isSleeping) {
-                display.innerText = "Sleeping 💤";
-                display.className = "text-5xl font-black tracking-tight font-mono transition-colors";
+                const sleepStart = window.sleepStartTimestamp ? new Date(window.sleepStartTimestamp) : new Date();
+                const sleepDurationMs = Math.max(0, Date.now() - sleepStart.getTime());
+                
+                const sHH = String(Math.floor(sleepDurationMs / (1000 * 60 * 60))).padStart(2, '0');
+                const sMM = String(Math.floor((sleepDurationMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const sSS = String(Math.floor((sleepDurationMs % (1000 * 60)) / 1000)).padStart(2, '0');
+
+                display.innerText = `${sHH}:${sMM}:${sSS}`;
+                display.className = "text-5xl font-black tracking-tight font-mono transition-colors text-indigo-500 dark:text-indigo-400";
                 progressBar.style.width = `0%`; 
                 progressBar.className = "h-full transition-all duration-1000";
                 badge.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full border transition-colors"; 
                 badge.innerText = "💤 Sleeping";
                 pooBadge.classList.add('hidden'); // Redundant to have both sleep badges
-                document.getElementById('countdown-subtext').innerHTML = `Countdown paused while ${dName} takes a snooze`; 
+                document.getElementById('countdown-subtext').innerHTML = `💤 ${dName} has been asleep for ${sHH}h ${sMM}m ${sSS}s`; 
                 headerTimer.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500 text-white min-w-[50px] text-center leading-none shadow-sm";
-                headerTimer.innerText = "Sleep 💤";
+                headerTimer.innerText = `Sleep (${sHH}:${sMM})`;
                 container.setAttribute('data-timer-state', 'sleep');
                 return;
             }
@@ -1973,8 +2040,7 @@
 
                 let newResetTime = null;
                 if (window.sleepRemainingMs !== undefined && window.sleepRemainingMs !== null) {
-                    // Because drinks recalculate perfectly based on historical events, we simply 
-                    // adjust the hard 'force reset' target timestamp forward exactly by the sleep time
+                    // Adjust parameters forward by the amount of sleep elapsed
                     const baseMs = window.rotationIntervalMinutes * 60 * 1000;
                     newResetTime = new Date(Date.now() + window.sleepRemainingMs - baseMs);
                 } else {
@@ -2142,17 +2208,17 @@
                 const displayTime = window.formatTime12Hour(item.time);
 
                 card.innerHTML = `
-                    <div class="flex items-center gap-3 min-w-0">
+                    <div class="flex items-center gap-3 min-w-0 cursor-pointer flex-grow" onclick="toggleLogExpansion(this)">
                         <span class="text-2xl">${emoji}</span>
                         <div class="min-w-0 flex-grow">
                             <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="font-bold text-xs text-slate-800">${displayType}</span>
                                 <span class="text-[9px] text-slate-400 font-medium">${friendlyDate} @ ${displayTime}</span>
                             </div>
-                            <p class="text-[10px] text-slate-500 truncate max-w-[240px] mt-0.5">${detailLabel}</p>
+                            <p class="log-detail-text text-[10px] text-slate-500 truncate max-w-[240px] mt-0.5 transition-all duration-300">${detailLabel}</p>
                         </div>
                     </div>
-                    <div class="flex gap-1">
+                    <div class="flex gap-1 flex-shrink-0">
                         <button onclick="openEditModal('${item.id}')" class="text-slate-300 hover:text-amber-500 p-2 rounded-full transition active:scale-95 flex-shrink-0">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
@@ -2166,6 +2232,20 @@
         }
         window.renderLogsTable = renderLogsTable;
         window.deleteLog = function(id) { window.deletePottyRecordFromSync(id); };
+
+        // Expansion capability on tap for longer notes
+        window.toggleLogExpansion = function(element) {
+            const p = element.querySelector('.log-detail-text');
+            if (p) {
+                if (p.classList.contains('truncate')) {
+                    p.classList.remove('truncate', 'max-w-[240px]');
+                    p.classList.add('whitespace-normal', 'break-words');
+                } else {
+                    p.classList.add('truncate', 'max-w-[240px]');
+                    p.classList.remove('whitespace-normal', 'break-words');
+                }
+            }
+        };
 
         // --- EDIT AND CUSTOM LOGS MODAL ---
         window.openCustomLogModal = function() {
